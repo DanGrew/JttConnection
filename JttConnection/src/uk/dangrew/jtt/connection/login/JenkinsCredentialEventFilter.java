@@ -86,9 +86,9 @@ public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >
       if ( client == null ) {
          digest.loginFailed();
          event.consume();
+      } else {
+         digest.loginSuccessful();
       }
-      
-      digest.loginSuccessful();
    }//End Method
 
    /**

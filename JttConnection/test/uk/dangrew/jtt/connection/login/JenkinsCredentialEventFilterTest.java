@@ -73,6 +73,7 @@ public class JenkinsCredentialEventFilterTest {
       verify( event ).consume();
       
       verify( digest ).loginFailed();
+      verify( digest, never() ).loginSuccessful();
    }//End Method
    
    @Test public void shouldNotConsumeEventIfLoginSucceeds(){
