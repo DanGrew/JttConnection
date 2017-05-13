@@ -10,9 +10,11 @@ package uk.dangrew.jtt.connection.javafx.dialog;
 
 import static org.mockito.Mockito.verify;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import com.sun.javafx.application.PlatformImpl;
@@ -21,13 +23,15 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
 import uk.dangrew.sd.graphics.launch.TestApplication;
 
 public class DialogConfigurationTest {
 
-   @Mock private Button button;
+   private Button button;
    
+   private Dialog< String > dialog;
    private DialogPane pane;
    private ButtonType buttonType;
    @Mock private EventHandler< ActionEvent > handler;
@@ -37,16 +41,23 @@ public class DialogConfigurationTest {
       TestApplication.startPlatform();
       MockitoAnnotations.initMocks( this );
       
+      PlatformImpl.runAndWait( () -> dialog = new Dialog<>() );
       buttonType = ButtonType.APPLY;
-      pane = new DialogPane();
+      pane = dialog.getDialogPane();
       pane.getButtonTypes().add( buttonType );
+      button = ( Button ) pane.lookupButton( buttonType );
       
-      PlatformImpl.runAndWait( () -> systemUnderTest = new DialogConfiguration() );
+      systemUnderTest = new DialogConfiguration();
+   }//End Method
+   
+   @After public void validate() {
+       Mockito.validateMockitoUsage();
    }//End Method
 
    @Test public void shouldAddEventFilterToButton() {
       systemUnderTest.provideFilterFor( pane, buttonType, ActionEvent.ACTION, handler );
-      verify( button ).addEventFilter( ActionEvent.ACTION, handler );
+      button.fire();
+      verify( handler ).handle( Mockito.any() );
    }//End Method
 
 }//End Class

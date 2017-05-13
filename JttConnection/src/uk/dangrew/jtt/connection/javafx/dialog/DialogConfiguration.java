@@ -33,8 +33,8 @@ public class DialogConfiguration {
             EventType< ActionEvent > eventType, 
             EventHandler< ActionEvent > handler 
    ) {
-      Button loginButton = ( Button )dialogPane.lookupButton( buttonType );
-      loginButton.addEventFilter(
+      Button button = ( Button )dialogPane.lookupButton( buttonType );
+      button.addEventFilter(
           eventType, 
           handler
       );
