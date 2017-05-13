@@ -8,6 +8,8 @@
  */
 package uk.dangrew.jtt.connection.login;
 
+import java.util.Optional;
+
 import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -125,10 +127,20 @@ public class JenkinsLoginPrompt extends Dialog< Boolean >{
       getDialogPane().setContent( border );
       
       digest.attachSource( this );
-      JenkinsCredentialEventFilter loginFilter = new JenkinsCredentialEventFilter( api, digest, locationTextField, usernameTextField, passwordTextField );
+      JenkinsCredentialEventFilter loginFilter = new JenkinsCredentialEventFilter( 
+               api, digest, locationTextField, usernameTextField, passwordTextField 
+      );
       configuration.provideFilterFor( getDialogPane(), loginButtonType, ActionEvent.ACTION, loginFilter );
       setResultConverter( button -> button == loginButtonType );
    }// End Constructor
+   
+   /**
+    * {@link #showAndWait()} that isn't final.
+    */
+   public Optional< Boolean > friendly_showAndWait(){
+      //not tested - friendly to workaround final - do not change
+      return showAndWait();
+   }//End Method
    
    GridPane content(){
       return content;
