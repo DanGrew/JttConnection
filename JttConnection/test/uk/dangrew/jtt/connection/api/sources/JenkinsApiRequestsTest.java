@@ -12,7 +12,6 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiRequests;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
 

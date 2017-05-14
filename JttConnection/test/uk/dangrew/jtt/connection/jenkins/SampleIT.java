@@ -8,7 +8,7 @@
  */
 package uk.dangrew.jtt.connection.jenkins;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 

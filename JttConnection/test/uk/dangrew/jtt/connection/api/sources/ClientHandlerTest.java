@@ -28,7 +28,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import uk.dangrew.jtt.connection.api.sources.ClientHandler;
 import uk.dangrew.jtt.connection.api.sources.ClientHandler.PreemptiveAuth;
 
 /**

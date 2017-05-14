@@ -10,7 +10,6 @@ package uk.dangrew.jtt.connection.api.sources;
 
 import org.junit.Test;
 
-import uk.dangrew.jtt.connection.api.sources.JenkinsBaseRequest;
 import uk.dangrew.jtt.model.utility.TestCommon;
 
 public class JenkinsBaseRequestTest {

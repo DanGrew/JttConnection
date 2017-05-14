@@ -12,7 +12,6 @@ import static org.mockito.Mockito.mock;
 
 import org.junit.Test;
 
-import uk.dangrew.jtt.connection.api.sources.BuildRequest;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.utility.TestCommon;
 

@@ -21,8 +21,6 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiDigest;
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
 import uk.dangrew.sd.core.category.Categories;
 import uk.dangrew.sd.core.category.Category;
 import uk.dangrew.sd.core.lockdown.DigestMessageReceiver;

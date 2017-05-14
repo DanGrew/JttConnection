@@ -39,13 +39,6 @@ import org.mockito.Spy;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
-import uk.dangrew.jtt.connection.api.sources.BuildRequest;
-import uk.dangrew.jtt.connection.api.sources.ClientHandler;
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiDigest;
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiRequests;
-import uk.dangrew.jtt.connection.api.sources.JenkinsBaseRequest;
-import uk.dangrew.jtt.connection.api.sources.JobRequest;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
 
