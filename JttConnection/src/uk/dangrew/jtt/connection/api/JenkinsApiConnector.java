@@ -30,8 +30,19 @@ public class JenkinsApiConnector {
     */
    public JenkinsApiConnector() {
       this( 
-               ( api, view ) -> new JenkinsLoginPrompt( api, view ),
+               JenkinsLoginPrompt::new,
                new JenkinsApiImpl()
+      );
+   }//End Constructor
+   
+   /**
+    * Constructs a new {@link JenkinsApiConnector}.
+    * @param api the {@link ExternalApi} to connect to.
+    */
+   public JenkinsApiConnector( ExternalApi api ) {
+      this( 
+               JenkinsLoginPrompt::new,
+               api
       );
    }//End Constructor
    
