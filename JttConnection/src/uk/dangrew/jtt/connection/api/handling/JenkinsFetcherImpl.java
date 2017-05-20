@@ -22,31 +22,29 @@ import uk.dangrew.jtt.model.storage.database.SystemWideJenkinsDatabaseImpl;
  * {@link JenkinsFetcherImpl} provides an implementation of the {@link JenkinsFetcher} interface
  * for updating {@link JenkinsJob}s.
  */
+//no test!?
 public class JenkinsFetcherImpl implements JenkinsFetcher {
 
-   private final ExternalApi externalApi;
    private final JsonTestResultsImporter testsImporter;
    private final JenkinsFetcherDigest digest;
    
    /**
     * Constructs a new {@link JenkinsFetcherImpl}.
-    * @param externalApi the {@link ExternalApi} to retrieve updates from.
     */
-   public JenkinsFetcherImpl( ExternalApi externalApi ) {
-      this( new SystemWideJenkinsDatabaseImpl().get(), externalApi, new JenkinsFetcherDigest() );
+   public JenkinsFetcherImpl() {
+      this( new SystemWideJenkinsDatabaseImpl().get(), new JenkinsFetcherDigest() );
    }//End Constructor
 
    /**
     * Constructs a new {@link JenkinsFetcherImpl}.
     * @param database the {@link JenkinsDatabase} to populate and update.
-    * @param externalApi the {@link ExternalApi} to retrieve updates from.
     * @param digest the {@link JenkinsFetcherDigest} to use.
     */
-   JenkinsFetcherImpl( JenkinsDatabase database, ExternalApi externalApi, JenkinsFetcherDigest digest ) {
-      if ( database == null ) throw new IllegalArgumentException( "Null database provided." );
-      if ( externalApi == null ) throw new IllegalArgumentException( "Null api provided." );
+   JenkinsFetcherImpl( JenkinsDatabase database, JenkinsFetcherDigest digest ) {
+      if ( database == null ) {
+         throw new IllegalArgumentException( "Null database provided." );
+      }
       
-      this.externalApi = externalApi;
       this.testsImporter = new JsonTestResultsImporterImpl( database );
       
       this.digest = digest;
@@ -56,14 +54,14 @@ public class JenkinsFetcherImpl implements JenkinsFetcher {
    /**
     * {@inheritDoc}
     */
-   @Override public void updateTestResults( JenkinsJob jenkinsJob ) {
+   @Override public void updateTestResults( ExternalApi api, JenkinsJob jenkinsJob ) {
       if ( jenkinsJob == null ) {
          return;
       }
       
-      String response = externalApi.executeRequest( LastBuildTestResultsWrappedRequest, jenkinsJob );
+      String response = api.executeRequest( LastBuildTestResultsWrappedRequest, jenkinsJob );
       testsImporter.updateTestResults( jenkinsJob, response );
-      response = externalApi.executeRequest( LastBuildTestResultsUnwrappedRequest, jenkinsJob );
+      response = api.executeRequest( LastBuildTestResultsUnwrappedRequest, jenkinsJob );
       testsImporter.updateTestResults( jenkinsJob, response );
    }//End Method
 

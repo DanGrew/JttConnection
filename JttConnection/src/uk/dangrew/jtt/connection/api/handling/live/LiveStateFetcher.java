@@ -29,7 +29,6 @@ import uk.dangrew.jtt.model.storage.database.SystemWideJenkinsDatabaseImpl;
 public class LiveStateFetcher {
 
    private final JenkinsDatabase database;
-   private final ExternalApi externalApi;
    private final ApiResponseToJsonConverter converter;
    private final JobDetailsParser parser;
    private final JenkinsFetcher fetcher;
@@ -38,39 +37,34 @@ public class LiveStateFetcher {
    
    /**
     * Constructs a new {@link LiveStateFetcher}.
-    * @param externalApi the {@link ExternalApi} to retrieve updates from.
     */
-   public LiveStateFetcher( ExternalApi externalApi ) {
+   public LiveStateFetcher() {
       this( 
                new SystemWideJenkinsDatabaseImpl().get(), 
-               externalApi, 
                new ApiResponseToJsonConverter(), 
                new JobDetailsParser( new JobDetailsModel() ),
-               new JenkinsFetcherImpl( externalApi )
+               new JenkinsFetcherImpl()
       );
    }//End Constructor
 
    /**
     * Constructs a new {@link LiveStateFetcher}.
     * @param database the {@link JenkinsDatabase} to populate and update.
-    * @param externalApi the {@link ExternalApi} to retrieve updates from.
     * @param converter the {@link ApiResponseToJsonConverter}.
     * @param parser the {@link JobDetailsParser}.
     * @param fetcher the {@link JenkinsFetcher}. 
     */
    LiveStateFetcher( 
             JenkinsDatabase database, 
-            ExternalApi externalApi, 
             ApiResponseToJsonConverter converter,
             JobDetailsParser parser,
             JenkinsFetcher fetcher
    ) {
-      if ( database == null || externalApi == null ) {
+      if ( database == null ) {
          throw new IllegalArgumentException( "Must supply non null parameters." );
       }
       
       this.database = database;
-      this.externalApi = externalApi;
       this.converter = converter;
       this.parser = parser;
       this.fetcher = fetcher;
@@ -80,24 +74,27 @@ public class LiveStateFetcher {
 
    /**
     * Method to load all job details for the last completed build of each {@link JenkinsJob}.
+    * @param api the {@link ExternalApi} to connect to.
     */
-   public void loadLastCompletedBuild() {
-      updateState( JenkinsBaseRequest.LastCompleteJobDetailsRequest );
+   public void loadLastCompletedBuild( ExternalApi api ) {
+      updateState( api, JenkinsBaseRequest.LastCompleteJobDetailsRequest );
    }//End Method
    
    /**
     * Method to update the current build state of each {@link JenkinsJob}.
+    * @param api the {@link ExternalApi} to connect to.
     */
-   public void updateBuildState() {
-      updateState( JenkinsBaseRequest.CurrentJobDetailsRequest );
+   public void updateBuildState( ExternalApi api ) {
+      updateState( api, JenkinsBaseRequest.CurrentJobDetailsRequest );
    }//End Method
    
    /**
     * Method to update the details given the {@link JenkinsBaseRequest} to execute.
+    * @param api the {@link ExternalApi} to connect to.
     * @param request the {@link JenkinsBaseRequest} to execute.
     */
-   private void updateState( JenkinsBaseRequest request ) {
-      String response = externalApi.executeRequest( request );
+   private void updateState( ExternalApi api, JenkinsBaseRequest request ) {
+      String response = api.executeRequest( request );
       
       JSONObject converted = converter.convert( response );
       if ( converted == null ) {
@@ -105,14 +102,15 @@ public class LiveStateFetcher {
       }
       parser.parse( converted );
       
-      database.jenkinsJobs().forEach( this::detectAndRequestTestResultUpdates );
+      database.jenkinsJobs().forEach( j -> detectAndRequestTestResultUpdates( api, j ) );
    }//End Method
    
    /**
     * Method to detect where test results are required and to perform the update immediately.
+    * @param api the {@link ExternalApi} to connect to.
     * @param job the {@link JenkinsJob} to check.
     */
-   private void detectAndRequestTestResultUpdates( JenkinsJob job ){
+   private void detectAndRequestTestResultUpdates( ExternalApi api, JenkinsJob job ){
       if ( job.buildStateProperty().get() == BuildState.Building ) {
          return;
       }
@@ -125,10 +123,10 @@ public class LiveStateFetcher {
       Integer lastNumberUpdatedFor = unstableJobsLastBuildNumbersTestRetrievedFor.get( job );
       if ( lastNumberUpdatedFor == null ) {
          unstableJobsLastBuildNumbersTestRetrievedFor.put( job, job.getBuildNumber() );
-         fetcher.updateTestResults( job );
+         fetcher.updateTestResults( api, job );
       } else if ( !lastNumberUpdatedFor.equals( job.getBuildNumber() ) ) {
          unstableJobsLastBuildNumbersTestRetrievedFor.put( job, job.getBuildNumber() );
-         fetcher.updateTestResults( job );
+         fetcher.updateTestResults( api, job );
       }
    }//End Method
 

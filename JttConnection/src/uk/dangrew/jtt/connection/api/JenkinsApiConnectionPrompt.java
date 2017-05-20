@@ -17,18 +17,18 @@ import uk.dangrew.jtt.connection.login.JenkinsLoginPrompt;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
 
 /**
- * The {@link JenkinsApiConnector} is responsible for connecting to the {@link JenkinsApiImpl}. This is 
+ * The {@link JenkinsApiConnectionPrompt} is responsible for connecting to the {@link JenkinsApiImpl}. This is 
  * a simple extraction to allow login for other systems.
  */
-public class JenkinsApiConnector {
+public class JenkinsApiConnectionPrompt {
 
    private final ExternalApi api;
    private final BiFunction< ExternalApi, DigestViewer, JenkinsLoginPrompt > promptSupplier;
    
    /**
-    * Constructs a new {@link JenkinsApiConnector}.
+    * Constructs a new {@link JenkinsApiConnectionPrompt}.
     */
-   public JenkinsApiConnector() {
+   public JenkinsApiConnectionPrompt() {
       this( 
                JenkinsLoginPrompt::new,
                new JenkinsApiImpl()
@@ -36,10 +36,10 @@ public class JenkinsApiConnector {
    }//End Constructor
    
    /**
-    * Constructs a new {@link JenkinsApiConnector}.
+    * Constructs a new {@link JenkinsApiConnectionPrompt}.
     * @param api the {@link ExternalApi} to connect to.
     */
-   public JenkinsApiConnector( ExternalApi api ) {
+   public JenkinsApiConnectionPrompt( ExternalApi api ) {
       this( 
                JenkinsLoginPrompt::new,
                api
@@ -47,11 +47,11 @@ public class JenkinsApiConnector {
    }//End Constructor
    
    /**
-    * Constructs a new {@link JenkinsApiConnector}.
+    * Constructs a new {@link JenkinsApiConnectionPrompt}.
     * @param promptSupplier the supplier of the {@link JenkinsLoginPrompt}.
     * @param api the {@link ExternalApi} to connect to.
     */
-   JenkinsApiConnector( 
+   JenkinsApiConnectionPrompt( 
             BiFunction< ExternalApi, DigestViewer, JenkinsLoginPrompt > promptSupplier,
             ExternalApi api
    ){

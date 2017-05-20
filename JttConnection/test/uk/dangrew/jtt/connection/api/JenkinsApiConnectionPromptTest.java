@@ -26,20 +26,20 @@ import uk.dangrew.jtt.connection.login.JenkinsLoginPrompt;
 import uk.dangrew.sd.graphics.launch.TestApplication;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
 
-public class JenkinsApiConnectorTest {
+public class JenkinsApiConnectionPromptTest {
 
    @Mock private ExternalApi api;
    @Mock private DigestViewer digestViewer;
    @Mock private JenkinsLoginPrompt prompt;
    @Mock private BiFunction< ExternalApi, DigestViewer, JenkinsLoginPrompt > promptSupplier;
-   private JenkinsApiConnector systemUnderTest;
+   private JenkinsApiConnectionPrompt systemUnderTest;
 
    @Before public void initialiseSystemUnderTest() {
       TestApplication.startPlatform();
       MockitoAnnotations.initMocks( this );
       
       when( promptSupplier.apply( api, digestViewer ) ).thenReturn( prompt );
-      systemUnderTest = new JenkinsApiConnector( 
+      systemUnderTest = new JenkinsApiConnectionPrompt( 
                promptSupplier,
                api
       );

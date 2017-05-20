@@ -45,6 +45,7 @@ public class LiveStateFetcherTest {
    private JenkinsJob job3;
    
    @Mock private ExternalApi api;
+   
    @Mock private ApiResponseToJsonConverter converter;
    @Mock private JobDetailsParser parser;
    @Mock private JenkinsFetcher fetcher;
@@ -64,19 +65,15 @@ public class LiveStateFetcherTest {
       database.store( job2 );
       database.store( job3 );
       
-      systemUnderTest = new LiveStateFetcher( database, api, converter, parser, fetcher );
+      systemUnderTest = new LiveStateFetcher( database, converter, parser, fetcher );
    }//End Method
    
-   @Test( expected = IllegalArgumentException.class ) public void shouldNotAcceptNullApi(){
-      new LiveStateFetcher( null );
-   }//End Method
-
    @Test public void shouldExecuteLastCompletedJobRequestAndParseIntoDatabase() {
       when( api.executeRequest( JenkinsBaseRequest.LastCompleteJobDetailsRequest ) ).thenReturn( API_RESPONSE );
       JSONObject converted = new JSONObject();
       when( converter.convert( API_RESPONSE ) ).thenReturn( converted );
       
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       verify( parser ).parse( converted );
    }//End Method
    
@@ -85,17 +82,17 @@ public class LiveStateFetcherTest {
       JSONObject converted = new JSONObject();
       when( converter.convert( API_RESPONSE ) ).thenReturn( converted );
       
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       verify( parser ).parse( converted );
    }//End Method
    
    @Test public void shouldNotUpdateTestsForJobWhenUpdatingBuildStateIfStateHasntChanged(){
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       verifyZeroInteractions( fetcher );
    }//End Method
    
    @Test public void shouldNotUpdateTestsForJobWhenLoadingCompletedBuildsIfStateHasntChanged(){
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       verifyZeroInteractions( fetcher );
    }//End Method
    
@@ -105,11 +102,11 @@ public class LiveStateFetcherTest {
       job2.setBuildStatus( status );
       job3.setBuildStatus( status );
       
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       if ( status == BuildResultStatus.UNSTABLE ) {
-         verify( fetcher ).updateTestResults( job1 );
-         verify( fetcher ).updateTestResults( job2 );
-         verify( fetcher ).updateTestResults( job3 );
+         verify( fetcher ).updateTestResults( api, job1 );
+         verify( fetcher ).updateTestResults( api, job2 );
+         verify( fetcher ).updateTestResults( api, job3 );
       } else {
          verifyZeroInteractions( fetcher );
       }
@@ -121,11 +118,11 @@ public class LiveStateFetcherTest {
       job2.setBuildStatus( status );
       job3.setBuildStatus( status );
       
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       if ( status == BuildResultStatus.UNSTABLE ) {
-         verify( fetcher ).updateTestResults( job1 );
-         verify( fetcher ).updateTestResults( job2 );
-         verify( fetcher ).updateTestResults( job3 );
+         verify( fetcher ).updateTestResults( api, job1 );
+         verify( fetcher ).updateTestResults( api, job2 );
+         verify( fetcher ).updateTestResults( api, job3 );
       } else {
          verifyZeroInteractions( fetcher );
       }
@@ -136,11 +133,11 @@ public class LiveStateFetcherTest {
       job2.setBuildStatus( BuildResultStatus.SUCCESS );
       job3.setBuildStatus( BuildResultStatus.SUCCESS );
       
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       job2.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       
-      verify( fetcher ).updateTestResults( job2 );
+      verify( fetcher ).updateTestResults( api, job2 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
@@ -149,18 +146,18 @@ public class LiveStateFetcherTest {
       job2.setBuildStatus( BuildResultStatus.SUCCESS );
       job3.setBuildStatus( BuildResultStatus.SUCCESS );
       
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       job2.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       
-      verify( fetcher ).updateTestResults( job2 );
+      verify( fetcher ).updateTestResults( api, job2 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
    @Test public void shouldNotUpdateTestsForJobWhenUpdatingBuildStateIfBuilding(){
       job1.buildStateProperty().set( BuildState.Building );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       
       verifyZeroInteractions( fetcher );
    }//End Method
@@ -168,7 +165,7 @@ public class LiveStateFetcherTest {
    @Test public void shouldNotUpdateTestsForJobWhenLoadingCompletedBuildsIfBuilding(){
       job1.buildStateProperty().set( BuildState.Building );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       
       verifyZeroInteractions( fetcher );
    }//End Method
@@ -176,61 +173,61 @@ public class LiveStateFetcherTest {
    @Test public void shouldNotUpdateTestsAgainForJobWhenUpdatingBuildState(){
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       
-      verify( fetcher, times( 1 ) ).updateTestResults( job1 );
+      verify( fetcher, times( 1 ) ).updateTestResults( api, job1 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
    @Test public void shouldNotUpdateTestsAgainForJobWhenLoadingCompletedBuilds(){
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       
-      verify( fetcher, times( 1 ) ).updateTestResults( job1 );
+      verify( fetcher, times( 1 ) ).updateTestResults( api, job1 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
    @Test public void shouldUpdateTestsAgainForJobWhenUpdatingBuildStateIfBuildNumberHasChanged(){
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       job1.setBuildNumber( 23 );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       job1.setBuildNumber( new Integer( 23 ) );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       
-      verify( fetcher, times( 2 ) ).updateTestResults( job1 );
+      verify( fetcher, times( 2 ) ).updateTestResults( api, job1 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
    @Test public void shouldUpdateTestsAgainForJobWhenLoadingCompletedBuildsIfBuildNumberHasChanged(){
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       job1.setBuildStatus( BuildResultStatus.UNSTABLE );
       job1.setBuildNumber( 23 );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       job1.setBuildNumber( new Integer( 23 ) );
-      systemUnderTest.loadLastCompletedBuild();
+      systemUnderTest.loadLastCompletedBuild( api );
       
-      verify( fetcher, times( 2 ) ).updateTestResults( job1 );
+      verify( fetcher, times( 2 ) ).updateTestResults( api, job1 );
       verifyNoMoreInteractions( fetcher );
    }//End Method
    
    @Test public void shouldNotBreakUpdatingLoopIfConnectionToJenkinsLost(){
       when( converter.convert( Mockito.anyString() ) ).thenReturn( null );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       verify( parser, times( 0 ) ).parse( Mockito.any() );
       
       when( converter.convert( Mockito.anyString() ) ).thenReturn( new JSONObject() );
-      systemUnderTest.updateBuildState();
+      systemUnderTest.updateBuildState( api );
       verify( parser, times( 1 ) ).parse( Mockito.any() );
    }//End Method
-
+   
 }//End Class

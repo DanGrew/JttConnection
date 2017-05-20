@@ -8,6 +8,7 @@
  */
 package uk.dangrew.jtt.connection.api.handling;
 
+import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 
 /**
@@ -18,8 +19,9 @@ public interface JenkinsFetcher {
 
    /**
     * Method to fetch the latest test results from the latest build of the given {@link JenkinsJob}.
+    * @param api the {@link ExternalApi} to connect to.
     * @param jenkinsJob the {@link JenkinsJob} to get results for.
     */
-   public void updateTestResults( JenkinsJob jenkinsJob );
+   public void updateTestResults( ExternalApi api, JenkinsJob jenkinsJob );
    
 }//End Interface
