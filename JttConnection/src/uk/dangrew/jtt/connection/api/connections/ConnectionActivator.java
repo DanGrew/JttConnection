@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
 
 /**
@@ -48,8 +49,8 @@ public class ConnectionActivator {
          throw new IllegalArgumentException( "Connection already active: " + connection.name() );
       }
       
-      fetcher.loadLastCompletedBuild( connection.api() );
-      JobUpdater updater = new JobUpdater( connection.api(), fetcher );
+      fetcher.loadLastCompletedBuild( connection );
+      JobUpdater updater = new JobUpdater( connection, fetcher );
       activations.put( connection, updater );
    }//End Method
 

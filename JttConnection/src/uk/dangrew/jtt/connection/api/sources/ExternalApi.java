@@ -8,8 +8,6 @@
  */
 package uk.dangrew.jtt.connection.api.sources;
 
-import org.apache.http.client.HttpClient;
-
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 
 /**
@@ -19,54 +17,53 @@ import uk.dangrew.jtt.model.jobs.JenkinsJob;
 public interface ExternalApi {
 
    /**
-    * Method to attempt a login.
+    * Method make a connection with the given credentials.
     * @param jenkinsLocation the location of Jenkins.
     * @param user the user name.
     * @param password the password.
-    * @return the {@link HttpClient} providing the connection to jenkins.
+    * @return the {@link JenkinsConnection} that has been checked and is successful, null otherwise.
     */
-   public HttpClient attemptLogin( String jenkinsLocation, String user, String password );
-   
-   /**
-    * Method to determine if logged in to jenkins. If not, no requests can be performed.
-    * @return true if logged in.
-    */
-   public boolean isLoggedIn();
+   public JenkinsConnection makeConnection( String jenkinsLocation, String user, String password );
    
    /**
     * Method to execute the given {@link JenkinsBaseRequest}.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @param request the {@link JenkinsBaseRequest} to execute.
     * @return the {@link String} response from the api.
     */
-   public String executeRequest( JenkinsBaseRequest request );
+   public String executeRequest( JenkinsConnection connection, JenkinsBaseRequest request );
    
    /**
     * Method to execute the given {@link JobRequest} against the given {@link JenkinsJob}.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @param request the {@link JobRequest} to execute.
     * @param job the {@link JenkinsJob} the request is for.
     * @return the {@link String} response from the api.
     */
-   public String executeRequest( JobRequest request, JenkinsJob job );
+   public String executeRequest( JenkinsConnection connection, JobRequest request, JenkinsJob job );
    
    /**
     * Method to execute the given {@link BuildRequest} against the given {@link JenkinsJob}.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @param request the {@link BuildRequest} to execute.
     * @param job the {@link JenkinsJob} the request is for.
     * @param buildNumber the build number the request is for.
     * @return the {@link String} response from the api.
     */
-   public String executeRequest( BuildRequest request, JenkinsJob job, int buildNumber );
+   public String executeRequest( JenkinsConnection connection, BuildRequest request, JenkinsJob job, int buildNumber );
    
    /**
     * Method to get the list of job names currently available.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @return the {@link String} response from the api.
     */
-   public String getJobsList();
+   public String getJobsList( JenkinsConnection connection );
    
    /**
     * Method to get the list of users currently available.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @return the {@link String} response from the api.
     */
-   public String getUsersList();
+   public String getUsersList( JenkinsConnection connection );
 
 }//End Interface

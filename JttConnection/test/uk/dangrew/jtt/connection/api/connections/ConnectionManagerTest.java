@@ -23,6 +23,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
+
 public class ConnectionManagerTest {
 
    private static final String NAME = "name";

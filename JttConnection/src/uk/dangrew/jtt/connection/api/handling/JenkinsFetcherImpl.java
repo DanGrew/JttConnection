@@ -12,6 +12,8 @@ import static uk.dangrew.jtt.connection.api.sources.JobRequest.LastBuildTestResu
 import static uk.dangrew.jtt.connection.api.sources.JobRequest.LastBuildTestResultsWrappedRequest;
 
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.data.json.tests.JsonTestResultsImporter;
 import uk.dangrew.jtt.connection.data.json.tests.JsonTestResultsImporterImpl;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
@@ -25,6 +27,7 @@ import uk.dangrew.jtt.model.storage.database.SystemWideJenkinsDatabaseImpl;
 //no test!?
 public class JenkinsFetcherImpl implements JenkinsFetcher {
 
+   private final ExternalApi api;
    private final JsonTestResultsImporter testsImporter;
    private final JenkinsFetcherDigest digest;
    
@@ -32,21 +35,23 @@ public class JenkinsFetcherImpl implements JenkinsFetcher {
     * Constructs a new {@link JenkinsFetcherImpl}.
     */
    public JenkinsFetcherImpl() {
-      this( new SystemWideJenkinsDatabaseImpl().get(), new JenkinsFetcherDigest() );
+      this( new SystemWideJenkinsDatabaseImpl().get(), new JenkinsApiImpl(), new JenkinsFetcherDigest() );
    }//End Constructor
 
    /**
     * Constructs a new {@link JenkinsFetcherImpl}.
     * @param database the {@link JenkinsDatabase} to populate and update.
+    * @param api the {@link ExternalApi} for executing requests.
     * @param digest the {@link JenkinsFetcherDigest} to use.
     */
-   JenkinsFetcherImpl( JenkinsDatabase database, JenkinsFetcherDigest digest ) {
+   JenkinsFetcherImpl( JenkinsDatabase database, ExternalApi api, JenkinsFetcherDigest digest ) {
       if ( database == null ) {
          throw new IllegalArgumentException( "Null database provided." );
       }
       
       this.testsImporter = new JsonTestResultsImporterImpl( database );
       
+      this.api = api;
       this.digest = digest;
       this.digest.attachSource( this );
    }//End Constructor
@@ -54,14 +59,14 @@ public class JenkinsFetcherImpl implements JenkinsFetcher {
    /**
     * {@inheritDoc}
     */
-   @Override public void updateTestResults( ExternalApi api, JenkinsJob jenkinsJob ) {
+   @Override public void updateTestResults( JenkinsConnection connection, JenkinsJob jenkinsJob ) {
       if ( jenkinsJob == null ) {
          return;
       }
       
-      String response = api.executeRequest( LastBuildTestResultsWrappedRequest, jenkinsJob );
+      String response = api.executeRequest( connection, LastBuildTestResultsWrappedRequest, jenkinsJob );
       testsImporter.updateTestResults( jenkinsJob, response );
-      response = api.executeRequest( LastBuildTestResultsUnwrappedRequest, jenkinsJob );
+      response = api.executeRequest( connection, LastBuildTestResultsUnwrappedRequest, jenkinsJob );
       testsImporter.updateTestResults( jenkinsJob, response );
    }//End Method
 

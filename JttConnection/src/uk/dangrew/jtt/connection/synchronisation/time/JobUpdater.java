@@ -12,6 +12,7 @@ import java.util.Timer;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.synchronisation.model.TimeKeeper;
 
 /**
@@ -27,31 +28,31 @@ public class JobUpdater extends TimeKeeper {
    
    /**
     * Constructs a new {@link JobUpdater} with a default interval of 5 seconds.
-    * @param api the {@link ExternalApi} to update for.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @param fetcher the {@link LiveStateFetcher} to request job updates on.
     */
-   public JobUpdater( ExternalApi api, LiveStateFetcher fetcher ) {
-      this( api, fetcher, new Timer(), INTERVAL );
+   public JobUpdater( JenkinsConnection connection, LiveStateFetcher fetcher ) {
+      this( connection, fetcher, new Timer(), INTERVAL );
    }//End Constructor
    
    /**
     * Constructs a new {@link JobUpdater} with a default interval of 5 seconds.
-    * @param api the {@link ExternalApi} to update for.
+    * @param connection the {@link JenkinsConnection} to execute with.
     */
-   public JobUpdater( ExternalApi api ) {
-      this( api, new LiveStateFetcher(), new Timer(), INTERVAL );
+   public JobUpdater( JenkinsConnection connection ) {
+      this( connection, new LiveStateFetcher(), new Timer(), INTERVAL );
    }//End Constructor
    
    /**
     * Constructs a new {@link JobUpdater}.
-    * @param api the {@link ExternalApi} to update for.
+    * @param connection the {@link JenkinsConnection} to execute with.
     * @param fetcher the {@link LiveStateFetcher} to request job updates on.
     * @param timer the {@link Timer} to time events.
     * @param interval the interval between updates.
     */
-   public JobUpdater( ExternalApi api, LiveStateFetcher fetcher, Timer timer, Long interval ) {
+   public JobUpdater( JenkinsConnection connection, LiveStateFetcher fetcher, Timer timer, Long interval ) {
       super( 
-               () -> fetcher.updateBuildState( api ),
+               () -> fetcher.updateBuildState( connection ),
                timer, 
                interval
       );

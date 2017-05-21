@@ -6,17 +6,16 @@
  *                 2017
  * ----------------------------------------
  */
-package uk.dangrew.jtt.connection.api.connections;
+package uk.dangrew.jtt.connection.api.sources;
 
 import static org.hamcrest.Matchers.is;
 import static org.junit.Assert.assertThat;
 
+import org.apache.http.client.HttpClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 
 public class JenkinsConnectionTest {
 
@@ -25,13 +24,13 @@ public class JenkinsConnectionTest {
    private static final String USER = "user";
    private static final String PASS = "pass";
    
-   @Mock private ExternalApi api;
+   @Mock private HttpClient client;
    private JenkinsConnection systemUnderTest;
 
    @Before public void initialiseSystemUnderTest() {
       MockitoAnnotations.initMocks( this );
       systemUnderTest = new JenkinsConnection( 
-               NAME, LOCATION, USER, PASS, api 
+               NAME, LOCATION, USER, PASS, client 
       );
    }//End Method
 
@@ -51,8 +50,8 @@ public class JenkinsConnectionTest {
       assertThat( systemUnderTest.password(), is( PASS ) );
    }//End Method
    
-   @Test public void shouldProvideApi(){
-      assertThat( systemUnderTest.api(), is( api ) );
+   @Test public void shouldProvideClient(){
+      assertThat( systemUnderTest.client(), is( client ) );
    }//End Method
 
 }//End Class

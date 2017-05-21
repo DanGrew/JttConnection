@@ -21,13 +21,12 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
 
 public class ConnectionActivatorTest {
 
    @Mock private JenkinsConnection connection;
-   @Mock private ExternalApi api;
    @Mock private JobUpdater updater;
    
    @Mock private LiveStateFetcher fetcher;
@@ -35,7 +34,6 @@ public class ConnectionActivatorTest {
 
    @Before public void initialiseSystemUnderTest() {
       MockitoAnnotations.initMocks( this );
-      when( connection.api() ).thenReturn( api );
       
       systemUnderTest = new ConnectionActivator( fetcher );
    }//End Method
@@ -45,7 +43,7 @@ public class ConnectionActivatorTest {
       
       systemUnderTest.connect( connection );
       
-      verify( fetcher ).loadLastCompletedBuild( api );
+      verify( fetcher ).loadLastCompletedBuild( connection );
       
       JobUpdater updater = systemUnderTest.updaterFor( connection );
       assertThat( updater.isAssociatedWith( fetcher ), is( true ) );

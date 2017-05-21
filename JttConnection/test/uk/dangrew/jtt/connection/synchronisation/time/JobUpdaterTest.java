@@ -25,8 +25,7 @@ import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
-import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 
 public class JobUpdaterTest {
 
@@ -34,7 +33,7 @@ public class JobUpdaterTest {
    @Captor private ArgumentCaptor< Long > delayCaptor;
    @Captor private ArgumentCaptor< Long > intervalCaptor;
    
-   @Mock private ExternalApi api;
+   @Mock private JenkinsConnection connection;
    @Mock private Timer timer;
    @Mock private LiveStateFetcher fetcher;
    private Long interval;
@@ -43,7 +42,7 @@ public class JobUpdaterTest {
    @Before public void initialiseSystemUnderTest(){
       interval = 1000l;
       MockitoAnnotations.initMocks( this );
-      systemUnderTest = new JobUpdater( api, fetcher, timer, interval );
+      systemUnderTest = new JobUpdater( connection, fetcher, timer, interval );
    }//End Method
    
    @Test public void shouldScheduleTimerTaskOnTimer(){
@@ -64,20 +63,20 @@ public class JobUpdaterTest {
       Mockito.verifyZeroInteractions( fetcher );
       
       timerTaskCaptor.getValue().run();
-      Mockito.verify( fetcher ).updateBuildState( api );
+      Mockito.verify( fetcher ).updateBuildState( connection );
    }//End Method
    
    @Test public void pollShouldRunRunnable(){
       Mockito.verifyZeroInteractions( fetcher );
       systemUnderTest.poll();
-      Mockito.verify( fetcher ).updateBuildState( api );
+      Mockito.verify( fetcher ).updateBuildState( connection );
    }//End Method
 
    @Test public void manualConstructorPollShouldRunRunnable(){
       Mockito.verifyZeroInteractions( fetcher );
-      systemUnderTest = new JobUpdater(  api, fetcher, null, null );
+      systemUnderTest = new JobUpdater( connection, fetcher, null, null );
       systemUnderTest.poll();
-      Mockito.verify( fetcher ).updateBuildState( api );
+      Mockito.verify( fetcher ).updateBuildState( connection );
    }//End Method
    
    @Test public void shouldBeAssociatedWith(){

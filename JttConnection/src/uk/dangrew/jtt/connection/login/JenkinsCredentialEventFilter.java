@@ -8,12 +8,11 @@
  */
 package uk.dangrew.jtt.connection.login;
 
-import org.apache.http.client.HttpClient;
-
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 
 /**
  * The {@link JenkinsCredentialEventFilter} provides an {@link EventHandler} for filtering login
@@ -82,8 +81,8 @@ public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >
       }
       digest.acceptCredentials();
       
-      HttpClient client = api.attemptLogin( location.getText(), username.getText(), password.getText() );
-      if ( client == null ) {
+      JenkinsConnection connection = api.makeConnection( location.getText(), username.getText(), password.getText() );
+      if ( connection == null ) {
          digest.loginFailed();
          event.consume();
       } else {

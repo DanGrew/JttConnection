@@ -6,10 +6,9 @@
  *                 2017
  * ----------------------------------------
  */
-package uk.dangrew.jtt.connection.api.connections;
+package uk.dangrew.jtt.connection.api.sources;
 
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
-import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
+import org.apache.http.client.HttpClient;
 
 /**
  * The {@link JenkinsConnection} represents a connection to an {@link ExternalApi}.
@@ -20,7 +19,7 @@ public class JenkinsConnection {
    private final String location;
    private final String username;
    private final String password;
-   private final ExternalApi api;
+   private final HttpClient client;
    
    /**
     * Constructs a new {@link JenkinsConnection}.
@@ -28,25 +27,14 @@ public class JenkinsConnection {
     * @param location the location of Jenkins.
     * @param username the username.
     * @param password the password.
+    * @param client the {@link HttpClient} configured for this connection.
     */
-   public JenkinsConnection( String name, String location, String username, String password ) {
-      this( name, location, username, password, new JenkinsApiImpl() );
-   }//End Constructor
-   
-   /**
-    * Constructs a new {@link JenkinsConnection}.
-    * @param name the name of the {@link JenkinsConnection}, for reference, unique.
-    * @param location the location of Jenkins.
-    * @param username the username.
-    * @param password the password.
-    * @param api the {@link ExternalApi}.
-    */
-   JenkinsConnection( String name, String location, String username, String password, ExternalApi api ) {
+   JenkinsConnection( String name, String location, String username, String password, HttpClient client ) {
       this.name = name;
       this.location = location;
       this.username = username;
       this.password = password;
-      this.api = api;
+      this.client = client;
    }//End Constructor
 
    /**
@@ -82,10 +70,10 @@ public class JenkinsConnection {
    }//End Method
 
    /**
-    * Access to the {@link ExternalApi} of the {@link JenkinsConnection}.
-    * @return the {@link ExternalApi}.
+    * Access to the {@link HttpClient} of the {@link JenkinsConnection}.
+    * @return the {@link HttpClient}.
     */
-   public ExternalApi api() {
-      return api;
+   public HttpClient client() {
+      return client;
    }//End Method
 }//End Class

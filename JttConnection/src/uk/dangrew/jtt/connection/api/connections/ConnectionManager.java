@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
+
 /**
  * The {@link ConnectionManager} is responsible for managing the {@link JenkinsConnection}s in the system
  * and access to them.

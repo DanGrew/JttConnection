@@ -24,15 +24,13 @@ import uk.dangrew.jtt.model.jobs.JenkinsJob;
  */
 public class JenkinsApiImpl implements ExternalApi {
 
+   static final String PREEMPTIVE_AUTH = "preemptive-auth";
    static final int LOGIN_TIMEOUT = 5000;
    
    private final JenkinsApiRequests requests;
    private final ClientHandler clientHandler;
    private final JenkinsApiDigest digest;
-   
-   private String jenkinsLocation;
-   private HttpClient connectedClient;
-   private HttpContext getContext;
+   private final HttpContext getContext;
    
    /**
     * Constructs a new {@link JenkinsApiImpl}.
@@ -55,46 +53,47 @@ public class JenkinsApiImpl implements ExternalApi {
       // Generate BASIC scheme object and stick it to the execution context
       BasicScheme basicAuth = new BasicScheme();
       getContext = new BasicHttpContext();
-      getContext.setAttribute( "preemptive-auth", basicAuth );
+      getContext.setAttribute( PREEMPTIVE_AUTH, basicAuth );
    }//End Constructor
 
    /**
     * {@inheritDoc}
     */
-   @Override public HttpClient attemptLogin( String jenkinsLocation, String user, String password ) {
-      connectedClient = clientHandler.constructClient( jenkinsLocation, user, password );
-      if ( connectedClient == null ) {
+   @Override public JenkinsConnection makeConnection( String location, String user, String password ) {
+      HttpClient client = clientHandler.constructClient( location, user, password );
+      if ( client == null ) {
          return null;
       }
       
-      this.jenkinsLocation = requests.prefixJenkinsLocation( jenkinsLocation );
+      String jenkinsLocation = requests.prefixJenkinsLocation( location );
       
       HttpGet get = requests.constructBaseRequest( jenkinsLocation );
       digest.executingLoginRequest();
       
-      clientHandler.adjustClientTimeout( connectedClient.getParams(), LOGIN_TIMEOUT );
-      String responseString = executeRequestAndUnpack( get );
-      clientHandler.resetTimeout( connectedClient.getParams() );
+      clientHandler.adjustClientTimeout( client.getParams(), LOGIN_TIMEOUT );
+      String responseString = executeRequestAndUnpack( client, get );
+      clientHandler.resetTimeout( client.getParams() );
       
       if ( responseString == null ) {
          digest.connectionFailed();
-         connectedClient = null;
          return null;
       } else {
          digest.connectionSuccess();
-         return connectedClient;
+         //needs to use name in some form, or remove name?
+         return new JenkinsConnection( jenkinsLocation, jenkinsLocation, user, password, client );
       }
    }//End Method
    
    /**
     * Convenience method to handle the execution of {@link HttpGet}s and unpack the responses
     * to a {@link String}.
+    * @param client the {@link HttpClient} to execute with.
     * @param getRequest the {@link HttpGet} to execute.
     * @return the unpacked response, or null.
     */
-   String executeRequestAndUnpack( HttpGet getRequest ){
+   String executeRequestAndUnpack( HttpClient client, HttpGet getRequest ){
       try {
-         HttpResponse response = connectedClient.execute( getRequest, getContext );
+         HttpResponse response = client.execute( getRequest, getContext );
          digest.handlingResponse();
          String responseString = clientHandler.handleResponse( response );
          digest.responseReady();
@@ -108,68 +107,41 @@ public class JenkinsApiImpl implements ExternalApi {
    /**
     * {@inheritDoc}
     */
-   @Override public boolean isLoggedIn() {
-      return connectedClient != null;
+   @Override public String executeRequest( JenkinsConnection connection, JenkinsBaseRequest request ) {
+      HttpGet get = request.execute( connection.location() );
+      return executeRequestAndUnpack( connection.client(), get );
    }//End Method
    
    /**
     * {@inheritDoc}
     */
-   @Override public String executeRequest( JenkinsBaseRequest request ) {
-      if ( !isLoggedIn() ) {
-         return null;
-      }
-      
-      HttpGet get = request.execute( jenkinsLocation );
-      return executeRequestAndUnpack( get );
+   @Override public String executeRequest( JenkinsConnection connection, JobRequest request, JenkinsJob job ) {
+      HttpGet get = request.execute( connection.location(), job );
+      return executeRequestAndUnpack( connection.client(), get );
    }//End Method
    
    /**
     * {@inheritDoc}
     */
-   @Override public String executeRequest( JobRequest request, JenkinsJob job ) {
-      if ( !isLoggedIn() ) {
-         return null;
-      }
-      
-      HttpGet get = request.execute( jenkinsLocation, job );
-      return executeRequestAndUnpack( get );
-   }//End Method
-   
-   /**
-    * {@inheritDoc}
-    */
-   @Override public String executeRequest( BuildRequest request, JenkinsJob job, int buildNumber ) {
-      if ( !isLoggedIn() ) {
-         return null;
-      }
-      
-      HttpGet get = request.execute( jenkinsLocation, job, buildNumber );
-      return executeRequestAndUnpack( get );
+   @Override public String executeRequest( JenkinsConnection connection, BuildRequest request, JenkinsJob job, int buildNumber ) {
+      HttpGet get = request.execute( connection.location(), job, buildNumber );
+      return executeRequestAndUnpack( connection.client(), get );
    }//End Method
 
    /**
     * {@inheritDoc}
     */
-   @Override public String getJobsList() {
-      if ( !isLoggedIn() ) {
-         return null;
-      }
-      
-      HttpGet get = requests.constructJobListRequest( jenkinsLocation );
-      return executeRequestAndUnpack( get );
+   @Override public String getJobsList( JenkinsConnection connection ) {
+      HttpGet get = requests.constructJobListRequest( connection.location() );
+      return executeRequestAndUnpack( connection.client(), get );
    }//End Method
    
    /**
     * {@inheritDoc}
     */
-   @Override public String getUsersList() {
-      if ( !isLoggedIn() ) {
-         return null;
-      }
-      
-      HttpGet get = requests.constructUserListRequest( jenkinsLocation );
-      return executeRequestAndUnpack( get );
+   @Override public String getUsersList( JenkinsConnection connection ) {
+      HttpGet get = requests.constructUserListRequest( connection.location() );
+      return executeRequestAndUnpack( connection.client(), get );
    }//End Method
 
 }//End Class

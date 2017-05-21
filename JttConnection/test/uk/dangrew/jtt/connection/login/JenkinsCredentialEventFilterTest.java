@@ -15,7 +15,6 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import org.apache.http.client.HttpClient;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,6 +24,7 @@ import org.mockito.MockitoAnnotations;
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.sd.graphics.launch.TestApplication;
 
 public class JenkinsCredentialEventFilterTest {
@@ -54,20 +54,20 @@ public class JenkinsCredentialEventFilterTest {
    @Test public void shouldNotAttemptLoginIfInputInvalid() {
       when( event.isConsumed() ).thenReturn( true );
       systemUnderTest.handle( event );
-      verify( api, never() ).attemptLogin( Mockito.anyString(), Mockito.anyString(), Mockito.anyString() );
+      verify( api, never() ).makeConnection( Mockito.anyString(), Mockito.anyString(), Mockito.anyString() );
       verify( digest ).validationError();
    }//End Method
 
    @Test public void shouldAttemptLoginIfInputValid(){
       when( event.isConsumed() ).thenReturn( false );
       systemUnderTest.handle( event );
-      verify( api ).attemptLogin( location.getText(), username.getText(), password.getText() );
+      verify( api ).makeConnection( location.getText(), username.getText(), password.getText() );
       verify( digest ).acceptCredentials();
    }//End Method
    
    @Test public void shouldConsumeEventIfLoginFails(){
       when( event.isConsumed() ).thenReturn( false );
-      when( api.attemptLogin( location.getText(), username.getText(), password.getText() ) ).thenReturn( null );
+      when( api.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( null );
       
       systemUnderTest.handle( event );
       verify( event ).consume();
@@ -78,7 +78,7 @@ public class JenkinsCredentialEventFilterTest {
    
    @Test public void shouldNotConsumeEventIfLoginSucceeds(){
       when( event.isConsumed() ).thenReturn( false );
-      when( api.attemptLogin( location.getText(), username.getText(), password.getText() ) ).thenReturn( mock( HttpClient.class ) );
+      when( api.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( mock( JenkinsConnection.class ) );
       
       systemUnderTest.handle( event );
       verify( event, never() ).consume();
