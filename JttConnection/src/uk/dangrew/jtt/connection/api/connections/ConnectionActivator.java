@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
+import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
 
@@ -21,6 +23,7 @@ import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
  */
 public class ConnectionActivator {
    
+   private final ExternalApi api;
    private final LiveStateFetcher fetcher;
    private final Map< JenkinsConnection, JobUpdater > activations;
    
@@ -28,17 +31,30 @@ public class ConnectionActivator {
     * Constructs a new {@link ConnectionActivator}.
     */
    public ConnectionActivator() {
-      this( new LiveStateFetcher() );
+      this( new JenkinsApiImpl(), new LiveStateFetcher() );
    }//End Constructor
    
    /**
     * Constructs a new {@link ConnectionActivator}.
+    * @param api the {@link ExternalApi} to activate with.
     * @param fetcher the {@link LiveStateFetcher} for fetching updates. 
     */
-   ConnectionActivator( LiveStateFetcher fetcher ) {
+   ConnectionActivator( ExternalApi api, LiveStateFetcher fetcher ) {
+      this.api = api;
       this.fetcher = fetcher;
       this.activations = new HashMap<>();
    }//End Constructor
+   
+   /**
+    * Method to make a connection with the given credentials.
+    * @param location the location of the Jenkins instance.
+    * @param username the username to login with.
+    * @param password the password to login with.
+    * @return the {@link JenkinsConnection} is the credentials are successful, null otherwise.
+    */
+   public JenkinsConnection makeConnection( String location, String username, String password ) {
+      return api.makeConnection( location, username, password );
+   }//End Method
    
    /**
     * Method to connect the given {@link JenkinsConnection}, trigger the polling of data.
@@ -46,7 +62,7 @@ public class ConnectionActivator {
     */
    public void connect( JenkinsConnection connection ) {
       if ( activations.containsKey( connection ) ) {
-         throw new IllegalArgumentException( "Connection already active: " + connection.name() );
+         throw new IllegalArgumentException( "Connection already active: " + connection.location() );
       }
       
       fetcher.loadLastCompletedBuild( connection );
@@ -60,7 +76,7 @@ public class ConnectionActivator {
     */
    public void disconnect( JenkinsConnection connection ) {
       if ( !activations.containsKey( connection ) ) {
-         throw new IllegalArgumentException( "Connection not active: " + connection.name() );
+         throw new IllegalArgumentException( "Connection not active: " + connection.location() );
       }
       
       activations.get( connection ).shutdown();

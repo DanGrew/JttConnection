@@ -12,6 +12,7 @@ import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.notNullValue;
 import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -21,6 +22,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import uk.dangrew.jtt.connection.api.handling.live.LiveStateFetcher;
+import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.synchronisation.time.JobUpdater;
 
@@ -29,13 +31,14 @@ public class ConnectionActivatorTest {
    @Mock private JenkinsConnection connection;
    @Mock private JobUpdater updater;
    
+   @Mock private ExternalApi api; 
    @Mock private LiveStateFetcher fetcher;
    private ConnectionActivator systemUnderTest;
 
    @Before public void initialiseSystemUnderTest() {
       MockitoAnnotations.initMocks( this );
       
-      systemUnderTest = new ConnectionActivator( fetcher );
+      systemUnderTest = new ConnectionActivator( api, fetcher );
    }//End Method
 
    @Test public void shouldConnectApiAndStartJobUpdater() {
@@ -76,6 +79,27 @@ public class ConnectionActivatorTest {
       assertThat( systemUnderTest.isActive( connection ), is( true ) );
       systemUnderTest.disconnect( connection );
       assertThat( systemUnderTest.isActive( connection ), is( false ) );
+   }//End Method
+   
+   @Test public void shouldMakeConnection(){
+      String location = "somewhere";
+      String user = "someone";
+      String pass = "something secret";
+      
+      JenkinsConnection connection = mock( JenkinsConnection.class );
+      when( api.makeConnection( location, user, pass ) ).thenReturn( connection );
+      
+      assertThat( systemUnderTest.makeConnection( location, user, pass ), is( connection ) );
+   }//End Method
+   
+   @Test public void shouldNotMakeConnection(){
+      String location = "somewhere";
+      String user = "someone";
+      String pass = "something secret";
+      
+      when( api.makeConnection( location, user, pass ) ).thenReturn( null );
+      
+      assertThat( systemUnderTest.makeConnection( location, user, pass ), is( nullValue() ) );
    }//End Method
    
 }//End Class

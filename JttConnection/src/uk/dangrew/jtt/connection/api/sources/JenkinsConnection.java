@@ -15,7 +15,6 @@ import org.apache.http.client.HttpClient;
  */
 public class JenkinsConnection {
 
-   private final String name;
    private final String location;
    private final String username;
    private final String password;
@@ -23,27 +22,17 @@ public class JenkinsConnection {
    
    /**
     * Constructs a new {@link JenkinsConnection}.
-    * @param name the name of the {@link JenkinsConnection}, for reference, unique.
     * @param location the location of Jenkins.
     * @param username the username.
     * @param password the password.
     * @param client the {@link HttpClient} configured for this connection.
     */
-   JenkinsConnection( String name, String location, String username, String password, HttpClient client ) {
-      this.name = name;
+   JenkinsConnection( String location, String username, String password, HttpClient client ) {
       this.location = location;
       this.username = username;
       this.password = password;
       this.client = client;
    }//End Constructor
-
-   /**
-    * Access to the name of the {@link JenkinsConnection}.
-    * @return the name.
-    */
-   public String name() {
-      return name;
-   }//End Method
 
    /**
     * Access to the location of the {@link JenkinsConnection}.

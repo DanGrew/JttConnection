@@ -110,6 +110,16 @@ public class JenkinsApiImplTest {
       verify( digest ).connectionSuccess();
    }//End Method
    
+   @Test public void shouldConstructJenkinsConnection() throws ClientProtocolException, IOException {
+      connection = systemUnderTest.makeConnection( JENKINS_LOCATION, USERNAME, PASSWORD );
+      assertEquals( client, connection.client() );
+      
+      assertThat( connection.client(), is( client ) );
+      assertThat( connection.username(), is( USERNAME ) );
+      assertThat( connection.password(), is( PASSWORD ) );
+      assertThat( connection.location(), is( requests.prefixJenkinsLocation( JENKINS_LOCATION ) ) );
+   }//End Method
+   
    @Test public void shouldNotAttemptLoginWhenClientIsNull() throws ClientProtocolException, IOException {
       Mockito.when( clientHandler.constructClient( JENKINS_LOCATION, USERNAME, PASSWORD ) ).thenReturn( null );
       Assert.assertNull( systemUnderTest.makeConnection( JENKINS_LOCATION, USERNAME, PASSWORD ) );

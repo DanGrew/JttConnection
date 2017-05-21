@@ -80,7 +80,7 @@ public class JenkinsApiImpl implements ExternalApi {
       } else {
          digest.connectionSuccess();
          //needs to use name in some form, or remove name?
-         return new JenkinsConnection( jenkinsLocation, jenkinsLocation, user, password, client );
+         return new JenkinsConnection( jenkinsLocation, user, password, client );
       }
    }//End Method
    

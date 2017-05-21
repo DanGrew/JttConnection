@@ -9,9 +9,9 @@
 package uk.dangrew.jtt.connection.api.connections;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.Set;
 
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 
@@ -22,7 +22,7 @@ import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 public class ConnectionManager {
 
    private final ConnectionActivator activator;
-   private final Map< String, JenkinsConnection > connections;
+   private final Set< JenkinsConnection > connections;
    
    /**
     * Constructs a new {@link ConnectionManager}.
@@ -36,36 +36,17 @@ public class ConnectionManager {
     * @param activator the {@link ConnectionActivator} performing activation.
     */
    ConnectionManager( ConnectionActivator activator ) {
-      this.connections = new TreeMap<>();
+      this.connections = new LinkedHashSet<>();
       this.activator = activator;
    }//End Constructor
    
    /**
-    * Getter for the {@link JenkinsConnection} of the given name.
-    * @param name the name of the {@link JenkinsConnection}.
-    * @return the {@link JenkinsConnection} with the given name.
+    * Method to verify that a {@link JenkinsConnection} exists for the given.
+    * @param connection the {@link JenkinsConnection} in question.
     */
-   public JenkinsConnection get( String name ) {
-      return connections.get( name );
-   }//End Method
-   
-   /**
-    * Method to verify there is no duplicate {@link JenkinsConnection} name.
-    * @param name the name to check.
-    */
-   private void verifyNoDuplicate( String name ) {
-      if ( get( name ) != null ) {
-         throw new IllegalArgumentException( "Connection already exists: " + name );
-      }
-   }//End Method
-   
-   /**
-    * Method to verufy that a {@link JenkinsConnection} exists for the given name.
-    * @param name the name in question.
-    */
-   private void verifyExists( String name ) {
-      if ( get( name ) == null ) {
-         throw new IllegalArgumentException( "Connection does not exist: " + name );
+   private void verifyExists( JenkinsConnection connection ) {
+      if ( !connections.contains( connection ) ) {
+         throw new IllegalArgumentException( "Connection does not exist: " + connection.location() );
       }
    }//End Method
    
@@ -74,53 +55,54 @@ public class ConnectionManager {
     * @return a {@link List} of {@link JenkinsConnection}s.
     */
    public List< JenkinsConnection > connections() {
-      return new ArrayList<>( connections.values() );
+      return new ArrayList<>( connections );
    }//End Method
    
    /**
-    * Method to store the given {@link JenkinsConnection}.
-    * @param connection the {@link JenkinsConnection} to store. Must not be already present.
+    * Method to make a connection with the given credentials.
+    * @param location the location of the jenkins instance.
+    * @param username the username to login with.
+    * @param password the password to login with.
+    * @return the {@link JenkinsConnection} for a successful login, null otherwise.
     */
-   public void store( JenkinsConnection connection ) {
-      verifyNoDuplicate( connection.name() );
-      
-      connections.put( connection.name(), connection );
+   public JenkinsConnection makeConnection( String location, String username, String password ) {
+      JenkinsConnection connection = activator.makeConnection( location, username, password );
+      if ( connection != null ) {
+         connections.add( connection );
+      }
+      return connection;
    }//End Method
 
    /**
     * Method to connect the {@link JenkinsConnection} with the given name.
-    * @param name the name of the {@link JenkinsConnection}. {@link JenkinsConnection} must be present
-    * for this name,
+    * @param connection the {@link JenkinsConnection} to connect.
     */
-   public void connect( String name ) {
-      verifyExists( name );
-      activator.connect( connections.get( name ) );
+   public void connect( JenkinsConnection connection ) {
+      verifyExists( connection );
+      activator.connect( connection );
    }//End Method
 
    /**
     * Method to disconnect the {@link JenkinsConnection} with the given name.
-    * @param name the name of the {@link JenkinsConnection}. {@link JenkinsConnection} must be present
-    * for this name,
+    * @param connection the {@link JenkinsConnection} to disconnect.
     */
-   public void disconnect( String name ) {
-      verifyExists( name );
-      activator.disconnect( connections.get( name ) );
+   public void disconnect( JenkinsConnection connection ) {
+      verifyExists( connection );
+      activator.disconnect( connection );
    }//End Method
 
    /**
     * Method to forget the {@link JenkinsConnection} with the given name.
-    * @param name the name of the {@link JenkinsConnection}. {@link JenkinsConnection} must be present
-    * for this name.
+    * @param connection the {@link JenkinsConnection} to forget.
     */
-   public void forget( String name ) {
-      verifyExists( name );
+   public void forget( JenkinsConnection connection ) {
+      verifyExists( connection );
       
-      JenkinsConnection connection = get( name );
       if ( activator.isActive( connection ) ) {
          activator.disconnect( connection );
       }
       
-      connections.remove( name );
+      connections.remove( connection );
    }//End Method
 
 }//End Class
