@@ -23,7 +23,7 @@ import org.mockito.MockitoAnnotations;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.connections.ConnectionManager;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.sd.graphics.launch.TestApplication;
 
@@ -35,7 +35,7 @@ public class JenkinsCredentialEventFilterTest {
    
    @Mock private ActionEvent event;
 
-   @Mock private ExternalApi api; 
+   @Mock private ConnectionManager connectionManager; 
    @Mock private JenkinsLoginDigest digest;
    @Mock private TextFieldEventFilter inputFilter;
    private JenkinsCredentialEventFilter systemUnderTest;
@@ -48,26 +48,26 @@ public class JenkinsCredentialEventFilterTest {
       username = new TextField( "Stone" );
       password = new TextField( "Cherry" );
       
-      systemUnderTest = new JenkinsCredentialEventFilter( inputFilter, api, digest, location, username, password );
+      systemUnderTest = new JenkinsCredentialEventFilter( connectionManager, inputFilter, digest, location, username, password );
    }//End Method
    
    @Test public void shouldNotAttemptLoginIfInputInvalid() {
       when( event.isConsumed() ).thenReturn( true );
       systemUnderTest.handle( event );
-      verify( api, never() ).makeConnection( Mockito.anyString(), Mockito.anyString(), Mockito.anyString() );
+      verify( connectionManager, never() ).makeConnection( Mockito.anyString(), Mockito.anyString(), Mockito.anyString() );
       verify( digest ).validationError();
    }//End Method
 
    @Test public void shouldAttemptLoginIfInputValid(){
       when( event.isConsumed() ).thenReturn( false );
       systemUnderTest.handle( event );
-      verify( api ).makeConnection( location.getText(), username.getText(), password.getText() );
+      verify( connectionManager ).makeConnection( location.getText(), username.getText(), password.getText() );
       verify( digest ).acceptCredentials();
    }//End Method
    
    @Test public void shouldConsumeEventIfLoginFails(){
       when( event.isConsumed() ).thenReturn( false );
-      when( api.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( null );
+      when( connectionManager.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( null );
       
       systemUnderTest.handle( event );
       verify( event ).consume();
@@ -78,17 +78,15 @@ public class JenkinsCredentialEventFilterTest {
    
    @Test public void shouldNotConsumeEventIfLoginSucceeds(){
       when( event.isConsumed() ).thenReturn( false );
-      when( api.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( mock( JenkinsConnection.class ) );
+      
+      JenkinsConnection connection = mock( JenkinsConnection.class );
+      when( connectionManager.makeConnection( location.getText(), username.getText(), password.getText() ) ).thenReturn( connection );
       
       systemUnderTest.handle( event );
       verify( event, never() ).consume();
       
       verify( digest ).loginSuccessful();
-   }//End Method
-   
-   @Test public void shouldBeAssociatedWithApi(){
-      assertThat( systemUnderTest.isAssociatedWith( api ), is( true ) );
-      assertThat( systemUnderTest.isAssociatedWith( mock( ExternalApi.class ) ), is( false ) );
+      verify( connectionManager ).connect( connection );
    }//End Method
    
    @Test public void shouldBeAssociatedWithDigest(){

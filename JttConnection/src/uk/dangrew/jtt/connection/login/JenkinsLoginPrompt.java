@@ -22,7 +22,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.javafx.dialog.DialogConfiguration;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
 
@@ -58,14 +57,12 @@ public class JenkinsLoginPrompt extends Dialog< Boolean >{
 
    /**
     * Constructs a new {@link JenkinsLoginPrompt}.
-    * @param api the {@link ExternalApi} for logging in.
     * @param digestViewer the {@link DigestViewer} for displaying the digest.
     */
-   public JenkinsLoginPrompt( ExternalApi api, DigestViewer digestViewer ) {
+   public JenkinsLoginPrompt( DigestViewer digestViewer ) {
       this( 
                new DialogConfiguration(), 
                new JenkinsLoginDigest(),
-               api,
                digestViewer
       );
    }//End Constructor
@@ -74,10 +71,9 @@ public class JenkinsLoginPrompt extends Dialog< Boolean >{
     * Constructs a new {@link JenkinsLoginPrompt}.
     * @param configuration the {@link DialogConfiguration}.
     * @param digest the {@link JenkinsLoginDigest} for reporting.
-    * @param api the {@link ExternalApi} for logging in.
     * @param digestViewer the {@link DigestViewer} for displaying the digest.
     */
-   JenkinsLoginPrompt( DialogConfiguration configuration, JenkinsLoginDigest digest, ExternalApi api, DigestViewer digestViewer ) {
+   JenkinsLoginPrompt( DialogConfiguration configuration, JenkinsLoginDigest digest, DigestViewer digestViewer ) {
       setTitle( TITLE );
       setHeaderText( HEADER_TEXT );
       setResizable( true );
@@ -128,7 +124,7 @@ public class JenkinsLoginPrompt extends Dialog< Boolean >{
       
       digest.attachSource( this );
       JenkinsCredentialEventFilter loginFilter = new JenkinsCredentialEventFilter( 
-               api, digest, locationTextField, usernameTextField, passwordTextField 
+               digest, locationTextField, usernameTextField, passwordTextField 
       );
       configuration.provideFilterFor( getDialogPane(), loginButtonType, ActionEvent.ACTION, loginFilter );
       setResultConverter( button -> button == loginButtonType );

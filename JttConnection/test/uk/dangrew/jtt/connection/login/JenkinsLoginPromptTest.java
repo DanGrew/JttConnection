@@ -18,7 +18,6 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
-import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
@@ -29,7 +28,6 @@ import javafx.geometry.Pos;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.javafx.dialog.DialogConfiguration;
 import uk.dangrew.sd.graphics.launch.TestApplication;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
@@ -37,7 +35,6 @@ import uk.dangrew.sd.viewer.basic.DigestViewer;
 public class JenkinsLoginPromptTest {
 
    @Spy private DialogConfiguration configuration;
-   @Mock private ExternalApi api;
    private DigestViewer digestViewer;
    @Spy private JenkinsLoginDigest digest;
    private JenkinsLoginPrompt systemUnderTest;
@@ -47,7 +44,7 @@ public class JenkinsLoginPromptTest {
       TestApplication.startPlatform();
       digestViewer = new DigestViewer();
       PlatformImpl.runAndWait( () -> systemUnderTest = new JenkinsLoginPrompt(
-               configuration, digest, api, digestViewer
+               configuration, digest, digestViewer
       ) );
    }//End Method
 
@@ -56,7 +53,7 @@ public class JenkinsLoginPromptTest {
       TestApplication.startPlatform();
       
       PlatformImpl.runAndWait( () -> {
-         new JenkinsLoginPrompt( api, digestViewer ).showAndWait();
+         new JenkinsLoginPrompt( digestViewer ).showAndWait();
       } );
    }//End Method
    
@@ -137,7 +134,6 @@ public class JenkinsLoginPromptTest {
       );
       
       JenkinsCredentialEventFilter filter = filterCaptor.getValue();
-      assertThat( filter.isAssociatedWith( api ), is( true ) );
       assertThat( filter.isAssociatedWith( digest ), is( true ) );
       assertThat( filter.isMonitoringLocation( systemUnderTest.locationTextField() ), is( true ) );
       assertThat( filter.isMonitoringUsername( systemUnderTest.usernameTextField() ), is( true ) );

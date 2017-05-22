@@ -11,7 +11,8 @@ package uk.dangrew.jtt.connection.login;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.TextField;
-import uk.dangrew.jtt.connection.api.sources.ExternalApi;
+import uk.dangrew.jtt.connection.api.connections.ConnectionManager;
+import uk.dangrew.jtt.connection.api.connections.SystemWideConnectionManager;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 
 /**
@@ -20,7 +21,7 @@ import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
  */
 public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >{
 
-   private final ExternalApi api;
+   private final ConnectionManager connectionManager;
    private final JenkinsLoginDigest digest;
    private final TextFieldEventFilter inputFilter;
    private final TextField location;
@@ -29,16 +30,15 @@ public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >
    
    /**
     * Constructs a new {@link JenkinsCredentialEventFilter}.
-    * @param api the {@link ExternalApi} to login with.
     * @param digest the {@link JenkinsLoginDigest} to report progress.
     * @param locationField the {@link TextField} for the location.
     * @param usernameField the {@link TextField} for the username.
     * @param passwordField the {@link TextField} for the password.
     */
-   public JenkinsCredentialEventFilter( ExternalApi api, JenkinsLoginDigest digest, TextField locationField, TextField usernameField, TextField passwordField ) {
+   public JenkinsCredentialEventFilter( JenkinsLoginDigest digest, TextField locationField, TextField usernameField, TextField passwordField ) {
       this( 
+               new SystemWideConnectionManager().get(),
                new TextFieldEventFilter( locationField, usernameField, passwordField ),
-               api, 
                digest,
                locationField, usernameField, passwordField 
       );
@@ -46,23 +46,23 @@ public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >
    
    /**
     * Constructs a new {@link JenkinsCredentialEventFilter}.
+    * @param connectionManager the {@link ConnectionManager}.
     * @param inputFilter the {@link TextFieldEventFilter} for validating inputs.
-    * @param api the {@link ExternalApi} to login with.
     * @param digest the {@link JenkinsLoginDigest} to report progress.
     * @param locationField the {@link TextField} for the location.
     * @param usernameField the {@link TextField} for the username.
     * @param passwordField the {@link TextField} for the password.
     */
    JenkinsCredentialEventFilter( 
+            ConnectionManager connectionManager,
             TextFieldEventFilter inputFilter, 
-            ExternalApi api, 
             JenkinsLoginDigest digest,
             TextField locationField, 
             TextField usernameField, 
             TextField passwordField 
    ) {
       this.inputFilter = inputFilter;
-      this.api = api;
+      this.connectionManager = connectionManager;
       this.digest = digest;
       this.location = locationField;
       this.username = usernameField;
@@ -81,24 +81,16 @@ public class JenkinsCredentialEventFilter implements EventHandler< ActionEvent >
       }
       digest.acceptCredentials();
       
-      JenkinsConnection connection = api.makeConnection( location.getText(), username.getText(), password.getText() );
+      JenkinsConnection connection = connectionManager.makeConnection( location.getText(), username.getText(), password.getText() );
       if ( connection == null ) {
          digest.loginFailed();
          event.consume();
       } else {
          digest.loginSuccessful();
+         connectionManager.connect( connection );
       }
    }//End Method
 
-   /**
-    * Method to determine whether the given is associated with this object.
-    * @param api the {@link ExternalApi} in question.
-    * @return true if identical to the {@link ExternalApi} used by this object.
-    */
-   boolean isAssociatedWith( ExternalApi api ) {
-      return this.api == api;
-   }//End Method
-   
    /**
     * Method to determine whether the given is associated with this object.
     * @param digest the {@link JenkinsLoginDigest} in question.
