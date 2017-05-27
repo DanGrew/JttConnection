@@ -112,4 +112,12 @@ public class JenkinsApiDigestTest {
       assertThat( categoryCaptor.getValue(), is( Categories.processingSequence() ) );
       assertThat( messageCaptor.getValue().getMessage(), is( JenkinsApiDigest.RESPONSE_READY ) );
    }//End Method
+   
+   @Test public void shouldHandleInvalidInput(){
+      systemUnderTest.invalidInput();
+      verify( messageReceiver ).log( Mockito.any(), Mockito.any(), categoryCaptor.capture(), messageCaptor.capture() );
+      
+      assertThat( categoryCaptor.getValue(), is( Categories.error() ) );
+      assertThat( messageCaptor.getValue().getMessage(), is( JenkinsApiDigest.INVALID_INPUT ) );
+   }//End Method
 }//End Class

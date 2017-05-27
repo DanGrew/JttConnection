@@ -21,9 +21,10 @@ public class JenkinsApiDigest extends ObjectDigestImpl {
    static final String JENKINS_API_CONNECTION = "Jenkins Api Connection";
    static final String EXECUTING_BASE_LOGIN_REQUEST = "Executing base login request...";
    static final String CLIENT_FAILED_TO_CONNECT = "Client failed to connect.";
-   static final String CLIENT_CONNECTED = "Client connected.";
+   static final String CLIENT_CONNECTED = "Client validated.";
    static final String HANDLING_RESPONSE_FOR_REQUEST = "Handling response for request.";
    static final String RESPONSE_READY = "Response ready.";
+   static final String INVALID_INPUT = "Login parameters invalid. Failed.";
 
    /**
     * Method to attach the {@link JenkinsApiImpl} as the source.
@@ -74,5 +75,12 @@ public class JenkinsApiDigest extends ObjectDigestImpl {
     */
    void responseReady() {
       log( Categories.processingSequence(), Messages.simpleMessage( RESPONSE_READY ) );
+   }//End Method
+   
+   /**
+    * Method to handle invalid input when trying to establish a connection.
+    */
+   void invalidInput() {
+      log( Categories.error(), Messages.simpleMessage( INVALID_INPUT ) );
    }//End Method
 }//End Class

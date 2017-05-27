@@ -57,9 +57,23 @@ public class JenkinsApiImpl implements ExternalApi {
    }//End Constructor
 
    /**
+    * Method to determine whether the given {@link String} is a valid input.
+    * @param input the {@link String} in question.
+    * @return true if valid.
+    */
+   private boolean isInputValid( String input ) {
+      return input != null && input.trim().length() > 0;
+   }//End Method
+   
+   /**
     * {@inheritDoc}
     */
    @Override public JenkinsConnection makeConnection( String location, String user, String password ) {
+      if ( !isInputValid( location ) || !isInputValid( user ) || !isInputValid( password ) ) {
+         digest.invalidInput();
+         return null;
+      }
+
       HttpClient client = clientHandler.constructClient( location, user, password );
       if ( client == null ) {
          return null;

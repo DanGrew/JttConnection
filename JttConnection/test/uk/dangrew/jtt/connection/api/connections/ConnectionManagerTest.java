@@ -11,7 +11,7 @@ package uk.dangrew.jtt.connection.api.connections;
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -20,16 +20,23 @@ import java.util.Arrays;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import javafx.util.Pair;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
+import uk.dangrew.jtt.model.event.structure.Event;
 
 public class ConnectionManagerTest {
 
    private static final String LOCATION = "somewhere";
    private static final String USERNAME = "someone";
    private static final String PASSWORD = "something secret";
+   
+   @Mock private ConnectionEvent events;
+   @Captor private ArgumentCaptor< Event< Pair< JenkinsConnection, ConnectionState > > > captor;
    
    @Mock private JenkinsConnection connection;
    @Mock private ConnectionActivator activator;
@@ -38,8 +45,7 @@ public class ConnectionManagerTest {
    @Before public void initialiseSystemUnderTest() {
       MockitoAnnotations.initMocks( this );
       when( activator.makeConnection( LOCATION, USERNAME, PASSWORD ) ).thenReturn( connection );
-      
-      systemUnderTest = new ConnectionManager( activator );
+      systemUnderTest = new ConnectionManager( events, activator );
    }//End Method
    
    @Test public void shouldMakeConnection(){
@@ -98,5 +104,47 @@ public class ConnectionManagerTest {
       verify( activator ).disconnect( connection );
       assertThat( systemUnderTest.connections().contains( connection ), is( false ) );
    }//End Method
+   
+   @Test public void shouldNotifyNewConnection(){
+      systemUnderTest.makeConnection( LOCATION, USERNAME, PASSWORD );
+      verify( events ).fire( captor.capture() );
+      
+      assertThat( captor.getValue().getValue().getKey(), is( connection ) );
+      assertThat( captor.getValue().getValue().getValue(), is( ConnectionState.Established ) );
+   }//End Method
+   
+   @Test public void shouldNotifyConnectionMade(){
+      systemUnderTest.makeConnection( LOCATION, USERNAME, PASSWORD );
+      systemUnderTest.connect( connection );
+      verify( events, times( 2 ) ).fire( captor.capture() );
+      
+      assertThat( captor.getValue().getValue().getKey(), is( connection ) );
+      assertThat( captor.getValue().getValue().getValue(), is( ConnectionState.Connected ) );
+   }//End Method
 
+   @Test public void shouldNotifyDisconnection(){
+      systemUnderTest.makeConnection( LOCATION, USERNAME, PASSWORD );
+      systemUnderTest.disconnect( connection );
+      verify( events, times( 2 ) ).fire( captor.capture() );
+      
+      assertThat( captor.getValue().getValue().getKey(), is( connection ) );
+      assertThat( captor.getValue().getValue().getValue(), is( ConnectionState.Disconnected ) );
+   }//End Method
+   
+   @Test public void shouldNotifyConnectionForgotten(){
+      systemUnderTest.makeConnection( LOCATION, USERNAME, PASSWORD );
+      systemUnderTest.forget( connection );
+      verify( events, times( 2 ) ).fire( captor.capture() );
+      
+      assertThat( captor.getValue().getValue().getKey(), is( connection ) );
+      assertThat( captor.getValue().getValue().getValue(), is( ConnectionState.Forgotten ) );
+   }//End Method
+   
+   @Test public void shouldProvideWhetherActive(){
+      when( activator.isActive( connection ) ).thenReturn( false );
+      assertThat( systemUnderTest.isActive( connection ), is( false ) );
+      
+      when( activator.isActive( connection ) ).thenReturn( true );
+      assertThat( systemUnderTest.isActive( connection ), is( true ) );
+   }//End Method
 }//End Constructor

@@ -13,7 +13,9 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
 
+import javafx.util.Pair;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
+import uk.dangrew.jtt.model.event.structure.Event;
 
 /**
  * The {@link ConnectionManager} is responsible for managing the {@link JenkinsConnection}s in the system
@@ -21,6 +23,7 @@ import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
  */
 public class ConnectionManager {
 
+   private final ConnectionEvent events; 
    private final ConnectionActivator activator;
    private final Set< JenkinsConnection > connections;
    
@@ -28,15 +31,17 @@ public class ConnectionManager {
     * Constructs a new {@link ConnectionManager}.
     */
    public ConnectionManager() {
-      this( new ConnectionActivator() );
+      this( new ConnectionEvent(), new ConnectionActivator() );
    }//End Constructor
    
    /**
     * Constructs a new {@link ConnectionManager}.
+    * @param events the {@link ConnectionEvent}.
     * @param activator the {@link ConnectionActivator} performing activation.
     */
-   ConnectionManager( ConnectionActivator activator ) {
+   ConnectionManager( ConnectionEvent events, ConnectionActivator activator ) {
       this.connections = new LinkedHashSet<>();
+      this.events = events;
       this.activator = activator;
    }//End Constructor
    
@@ -69,6 +74,7 @@ public class ConnectionManager {
       JenkinsConnection connection = activator.makeConnection( location, username, password );
       if ( connection != null ) {
          connections.add( connection );
+         events.fire( new Event<>( new Pair<>( connection, ConnectionState.Established ) ) );
       }
       return connection;
    }//End Method
@@ -80,6 +86,7 @@ public class ConnectionManager {
    public void connect( JenkinsConnection connection ) {
       verifyExists( connection );
       activator.connect( connection );
+      events.fire( new Event<>( new Pair<>( connection, ConnectionState.Connected ) ) );
    }//End Method
 
    /**
@@ -89,6 +96,7 @@ public class ConnectionManager {
    public void disconnect( JenkinsConnection connection ) {
       verifyExists( connection );
       activator.disconnect( connection );
+      events.fire( new Event<>( new Pair<>( connection, ConnectionState.Disconnected ) ) );
    }//End Method
 
    /**
@@ -99,10 +107,20 @@ public class ConnectionManager {
       verifyExists( connection );
       
       if ( activator.isActive( connection ) ) {
-         activator.disconnect( connection );
+         disconnect( connection );
       }
       
       connections.remove( connection );
+      events.fire( new Event<>( new Pair<>( connection, ConnectionState.Forgotten ) ) );
+   }//End Method
+   
+   /**
+    * Method to determine whether the given {@link JenkinsConnection} is actively being polled.
+    * @param connection the {@link JenkinsConnection} in question.
+    * @return true if being polled.
+    */
+   public boolean isActive( JenkinsConnection connection ) {
+      return activator.isActive( connection );
    }//End Method
 
 }//End Class

@@ -8,6 +8,7 @@
  */
 package uk.dangrew.jtt.connection.login;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.Matchers.hasSize;
 import static org.junit.Assert.assertThat;
@@ -81,42 +82,7 @@ public class JenkinsLoginPromptTest {
       BorderPane wrapper = ( BorderPane )systemUnderTest.getDialogPane().getContent();
       assertThat( wrapper.getCenter(), is( systemUnderTest.content() ) );
       assertThat( systemUnderTest.content().getAlignment(), is( Pos.CENTER ) );
-   }//End Method
-   
-   @Test public void shouldHavePadding() {
-      assertThat( systemUnderTest.content().getHgap(), is( JenkinsLoginPrompt.PADDING ) );
-      assertThat( systemUnderTest.content().getVgap(), is( JenkinsLoginPrompt.PADDING ) );
-      assertThat( systemUnderTest.content().getPadding().getBottom(), is( JenkinsLoginPrompt.PADDING ) );
-      assertThat( systemUnderTest.content().getPadding().getTop(), is( JenkinsLoginPrompt.PADDING ) );
-      assertThat( systemUnderTest.content().getPadding().getLeft(), is( JenkinsLoginPrompt.PADDING ) );
-      assertThat( systemUnderTest.content().getPadding().getRight(), is( JenkinsLoginPrompt.PADDING ) );
-   }//End Method
-   
-   @Test public void shouldSplitIntoColumnsForAppearance(){
-      assertThat( systemUnderTest.content().getColumnConstraints(), hasSize( 4 ) );
-      assertThat( systemUnderTest.content().getColumnConstraints().get( 0 ).getPercentWidth(), is( JenkinsLoginPrompt.LEFT_COLUMN_PERCENT_WIDTH ) );
-      assertThat( systemUnderTest.content().getColumnConstraints().get( 1 ).getPercentWidth(), is( JenkinsLoginPrompt.LABEL_COLUMN_PERCENT_WIDTH ) );
-      assertThat( systemUnderTest.content().getColumnConstraints().get( 2 ).getPercentWidth(), is( JenkinsLoginPrompt.FIELD_COLUMN_PERCENT_WIDTH ) );
-      assertThat( systemUnderTest.content().getColumnConstraints().get( 3 ).getPercentWidth(), is( JenkinsLoginPrompt.RIGHT_COLUMN_PERCENT_WIDTH ) );
-   }//End Method
-   
-   @Test public void shouldHaveLoginFieldsAndLabels() {
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.locationLabel() ), is( true ) );
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.usernameLabel() ), is( true ) );
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.passwordLabel() ), is( true ) );
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.locationTextField() ), is( true ) );
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.usernameTextField() ), is( true ) );
-      assertThat( systemUnderTest.content().getChildren().contains( systemUnderTest.passwordTextField() ), is( true ) );
-   }//End Method
-   
-   @Test public void shouldConfigureLoginFieldsAndLabels() {
-      assertThat( systemUnderTest.locationLabel().getText(), is( JenkinsLoginPrompt.LOCATION_LABEL ) );
-      assertThat( systemUnderTest.usernameLabel().getText(), is( JenkinsLoginPrompt.USERNAME_LABEL ) );
-      assertThat( systemUnderTest.passwordLabel().getText(), is( JenkinsLoginPrompt.PASSWORD_LABEL ) );
-      
-      assertThat( systemUnderTest.locationTextField().getPromptText(), is( JenkinsLoginPrompt.LOCATION_PROMPT ) );
-      assertThat( systemUnderTest.usernameTextField().getPromptText(), is( JenkinsLoginPrompt.USERNAME_PROMPT ) );
-      assertThat( systemUnderTest.passwordTextField().getPromptText(), is( JenkinsLoginPrompt.PASSWORD_PROMPT ) );
+      assertThat( systemUnderTest.content(), is( instanceOf( JenkinsLoginDetails.class ) ) );
    }//End Method
    
    @Test public void shouldPlaceDigestInWithContent(){
@@ -135,9 +101,9 @@ public class JenkinsLoginPromptTest {
       
       JenkinsCredentialEventFilter filter = filterCaptor.getValue();
       assertThat( filter.isAssociatedWith( digest ), is( true ) );
-      assertThat( filter.isMonitoringLocation( systemUnderTest.locationTextField() ), is( true ) );
-      assertThat( filter.isMonitoringUsername( systemUnderTest.usernameTextField() ), is( true ) );
-      assertThat( filter.isMonitoringPassword( systemUnderTest.passwordTextField() ), is( true ) );
+      assertThat( filter.isMonitoringLocation( systemUnderTest.content().locationField() ), is( true ) );
+      assertThat( filter.isMonitoringUsername( systemUnderTest.content().usernameField() ), is( true ) );
+      assertThat( filter.isMonitoringPassword( systemUnderTest.content().passwordField() ), is( true ) );
    }//End Method
    
    @Test public void shouldProvideSuccessForLoginActionHavingPassedFilter() {

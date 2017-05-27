@@ -10,6 +10,7 @@ package uk.dangrew.jtt.connection.api.sources;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
@@ -324,6 +325,26 @@ public class JenkinsApiImplTest {
       order.verify( clientHandler ).adjustClientTimeout( params, JenkinsApiImpl.LOGIN_TIMEOUT );
       order.verify( clientHandler ).handleResponse( Mockito.any() );
       order.verify( clientHandler ).resetTimeout( params );
+   }//End Method
+   
+   @Test public void shouldShouldRejectInvalidInput(){
+      assertThat( systemUnderTest.makeConnection( null, USERNAME, PASSWORD ), is( nullValue() ) );
+      verify( digest ).invalidInput();
+      
+      assertThat( systemUnderTest.makeConnection( JENKINS_LOCATION, null, PASSWORD ), is( nullValue() ) );
+      verify( digest, times( 2 ) ).invalidInput();
+      
+      assertThat( systemUnderTest.makeConnection( JENKINS_LOCATION, USERNAME, null ), is( nullValue() ) );
+      verify( digest, times( 3 ) ).invalidInput();
+      
+      assertThat( systemUnderTest.makeConnection( "   ", USERNAME, PASSWORD ), is( nullValue() ) );
+      verify( digest, times( 4 ) ).invalidInput();
+      
+      assertThat( systemUnderTest.makeConnection( JENKINS_LOCATION, "   ", PASSWORD ), is( nullValue() ) );
+      verify( digest, times( 5 ) ).invalidInput();
+      
+      assertThat( systemUnderTest.makeConnection( JENKINS_LOCATION, USERNAME, "   " ), is( nullValue() ) );
+      verify( digest, times( 6 ) ).invalidInput();
    }//End Method
    
 }//End Class
