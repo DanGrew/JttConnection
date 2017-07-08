@@ -50,6 +50,7 @@ public class LiveStateFetcherTest {
    @Mock private ExternalApi api;
    @Mock private ApiResponseToJsonConverter converter;
    @Mock private JobDetailsParser parser;
+   @Mock private CommitsFetcher commitsFetcher;
    @Mock private JenkinsFetcher fetcher;
    private JenkinsDatabase database;
    private LiveStateFetcher systemUnderTest;
@@ -67,7 +68,7 @@ public class LiveStateFetcherTest {
       database.store( job2 );
       database.store( job3 );
       
-      systemUnderTest = new LiveStateFetcher( database, api, converter, parser, fetcher );
+      systemUnderTest = new LiveStateFetcher( database, api, converter, parser, fetcher, commitsFetcher );
    }//End Method
    
    @Test public void shouldExecuteLastCompletedJobRequestAndParseIntoDatabase() {
@@ -230,6 +231,16 @@ public class LiveStateFetcherTest {
       when( converter.convert( Mockito.anyString() ) ).thenReturn( new JSONObject() );
       systemUnderTest.updateBuildState( connection );
       verify( parser, times( 1 ) ).parse( Mockito.any() );
+   }//End Method
+   
+   @Test public void shouldFetchCommitsAfterLastCompleteJobUpdate(){
+      systemUnderTest.updateBuildState( connection );
+      verify( commitsFetcher ).executeChangeSetsRequest( connection );
+   }//End Method
+   
+   @Test public void shouldFetchCommitsAfterCurrentJobUpdate(){
+      systemUnderTest.loadLastCompletedBuild( connection );
+      verify( commitsFetcher ).executeChangeSetsRequest( connection );
    }//End Method
    
 }//End Class

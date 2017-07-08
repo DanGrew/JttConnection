@@ -112,6 +112,16 @@ public class CommitModelTest {
       assertThat( job.commits().get( 1 ).commits(), hasSize( 1 ) );
    }//End Method
    
+   @Test public void shouldClearPreviousDataWhenSettingJob(){
+      parseBasicCommit();
+      
+      JenkinsJob alternate = new JenkinsJobImpl( "another" );
+      systemUnderTest.setJob( alternate );
+      systemUnderTest.endChangeSet( KEY );
+      
+      assertThat( alternate.commits(), is( empty() ) );
+   }//End Method
+   
    /**
     * Method to perform a basic parse with all data present, defined at the top of this test.
     */

@@ -24,7 +24,8 @@ public enum JobRequest {
    LastBuildJobDetailsRequest( ( l, j ) -> JenkinsApiRequests.get().constructLastBuildJobDetailsRequest( l, j ) ),
    LastBuildTestResultsWrappedRequest( ( l, j ) -> JenkinsApiRequests.get().constructLastBuildTestResultsWrappedRequest( l, j ) ),
    LastBuildTestResultsUnwrappedRequest( ( l, j ) -> JenkinsApiRequests.get().constructLastBuildTestResultsUnwrappedRequest( l, j ) ),
-   ListOfBuildsRequest( ( l, j ) -> JenkinsApiRequests.get().constructListOfBuildsRequest( l, j ) );
+   ListOfBuildsRequest( ( l, j ) -> JenkinsApiRequests.get().constructListOfBuildsRequest( l, j ) ),
+   ChangeSetsRequest( ( l, j ) -> JenkinsApiRequests.get().constructLastBuildChangeSetsRequest( l, j ) );
    
    
    private final transient BiFunction< String, JenkinsJob, HttpGet > executor;

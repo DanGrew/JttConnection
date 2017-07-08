@@ -33,9 +33,9 @@ public class LiveStateFetcher {
    private final ExternalApi api;
    private final JenkinsDatabase database;
    private final ApiResponseToJsonConverter converter;
-   private final JobDetailsParser parser;
+   private final JobDetailsParser jobsParser;
    private final JenkinsFetcher fetcher;
-   
+   private final CommitsFetcher commitsFetcher;
    private final Map< JenkinsJob, Integer > unstableJobsLastBuildNumbersTestRetrievedFor;
    
    /**
@@ -47,7 +47,8 @@ public class LiveStateFetcher {
                new JenkinsApiImpl(),
                new ApiResponseToJsonConverter(), 
                new JobDetailsParser( new JobDetailsModel() ),
-               new JenkinsFetcherImpl()
+               new JenkinsFetcherImpl(),
+               new CommitsFetcher()
       );
    }//End Constructor
 
@@ -56,15 +57,17 @@ public class LiveStateFetcher {
     * @param database the {@link JenkinsDatabase} to populate and update.
     * @param api the {@link ExternalApi} to execute requests.
     * @param converter the {@link ApiResponseToJsonConverter}.
-    * @param parser the {@link JobDetailsParser}.
+    * @param jobParser the {@link JobDetailsParser}.
     * @param fetcher the {@link JenkinsFetcher}. 
+    * @param commitsFetcher the {@link CommitsFetcher}.
     */
    LiveStateFetcher( 
             JenkinsDatabase database, 
             ExternalApi api,
             ApiResponseToJsonConverter converter,
-            JobDetailsParser parser,
-            JenkinsFetcher fetcher
+            JobDetailsParser jobParser,
+            JenkinsFetcher fetcher,
+            CommitsFetcher commitsFetcher
    ) {
       if ( database == null ) {
          throw new IllegalArgumentException( "Must supply non null parameters." );
@@ -73,8 +76,9 @@ public class LiveStateFetcher {
       this.database = database;
       this.api = api;
       this.converter = converter;
-      this.parser = parser;
+      this.jobsParser = jobParser;
       this.fetcher = fetcher;
+      this.commitsFetcher = commitsFetcher;
       
       this.unstableJobsLastBuildNumbersTestRetrievedFor = new HashMap<>();
    }//End Constructor
@@ -107,9 +111,11 @@ public class LiveStateFetcher {
       if ( converted == null ) {
          return;
       }
-      parser.parse( converted );
+      jobsParser.parse( converted );
       
       database.jenkinsJobs().forEach( j -> detectAndRequestTestResultUpdates( connection, j ) );
+      
+      commitsFetcher.executeChangeSetsRequest( connection );
    }//End Method
    
    /**

@@ -8,6 +8,9 @@
  */
 package uk.dangrew.jtt.connection.api.sources;
 
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -114,4 +117,19 @@ public class JenkinsApiRequestsTest {
       Assert.assertEquals( "/job/anything%20with%20spaces", systemUnderTest.extractAndPrefixJob( jobWithSpaces ) );
    }//End Method
 
+   @Test public void shouldExtractNameAndNumber(){
+      JenkinsJob job = new JenkinsJobImpl( "Something" );
+      job.setBuildNumber( 673 );
+      assertThat( systemUnderTest.extractAndPrefixJobNameAndNumber( job ), is( "/job/Something/673") );
+   }//End Method
+   
+   @Test public void shouldConstructChangeSetsRequest(){
+      JenkinsJob job = new JenkinsJobImpl( "Something" );
+      job.setBuildNumber( 673 );
+      final String expectedRequest = "http://some-location/job/Something/673" + JenkinsApiRequests.CHANGE_SETS;
+      Assert.assertEquals( 
+               expectedRequest, 
+               systemUnderTest.constructLastBuildChangeSetsRequest( "http://some-location", job ).getURI().toString() 
+      );
+   }//End Method
 }//End Class

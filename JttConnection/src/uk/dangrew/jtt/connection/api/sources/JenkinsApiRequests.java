@@ -29,6 +29,8 @@ class JenkinsApiRequests {
    static final String CURRENT_JOB_DETAILS       = "/api/json?tree=jobs[name,lastCompletedBuild[result],lastBuild" + BUILD_DETAILS;
    static final String LAST_COMPLETE_JOB_DETAILS = "/api/json?tree=jobs[name,lastCompletedBuild" + BUILD_DETAILS;
    
+   static final String CHANGE_SETS = "/api/json?tree=changeSet[items[commitId,timestamp,author[fullName],msg,comment,paths[editType,file]]]";
+   
    static final String TEST_CASES_PROPERTIES = "duration,name,className,failedSince,skipped,status,age";
    static final String TEST_CLASS_PROPERTIES = "duration,name,cases[" + TEST_CASES_PROPERTIES +"]";
    static final String TEST_SUITES = "suites[" + TEST_CLASS_PROPERTIES + "]";
@@ -72,6 +74,15 @@ class JenkinsApiRequests {
     */
    String extractAndPrefixJob( JenkinsJob jenkinsJob ) {
       return JOB + jenkinsJob.nameProperty().get().replaceAll( " ", "%20" );
+   }//End Method
+   
+   /**
+    * Method to extract the part of the path to the given {@link JenkinsJob}, accounting for the number.
+    * @param jenkinsJob the {@link JenkinsJob} in question.
+    * @return the path to the job.
+    */
+   String extractAndPrefixJobNameAndNumber( JenkinsJob jenkinsJob ) {
+      return extractAndPrefixJob( jenkinsJob ) + "/" + jenkinsJob.getBuildNumber();
    }//End Method
    
    /**
@@ -178,6 +189,16 @@ class JenkinsApiRequests {
     */
    public HttpGet constructLastBuildTestResultsUnwrappedRequest( String jenkinsLocation, JenkinsJob jenkinsJob ) {
       return new HttpGet( jenkinsLocation + extractAndPrefixJob( jenkinsJob ) + LAST_BUILD_TEST_RESULTS_UNWRAPPED );
+   }//End Method
+   
+   /**
+    * Method to construct the request for getting the change sets for the current build of the given.
+    * @param jenkinsLocation the location.
+    * @param jenkinsJob the {@link JenkinsJob} in question.
+    * @return the {@link HttpGet} to execute.
+    */
+   public HttpGet constructLastBuildChangeSetsRequest( String jenkinsLocation, JenkinsJob jenkinsJob ) {
+      return new HttpGet( jenkinsLocation + extractAndPrefixJobNameAndNumber( jenkinsJob ) + CHANGE_SETS );
    }//End Method
 
 }//End Class

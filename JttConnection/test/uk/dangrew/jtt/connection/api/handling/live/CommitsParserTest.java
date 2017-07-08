@@ -64,12 +64,6 @@ public class CommitsParserTest {
       assertThat( firstCommit.commits(), hasSize( 1 ) );
       assertThat( firstCommit.commits().get( 0 ).itemPath(), is( "RELEASES" ) );
       assertThat( firstCommit.commits().get( 0 ).editType(), is( EditType.edit ) );
-   
-      job.commits().forEach( c -> {
-         System.out.println( c.id() );
-         System.out.println( c.comment() );
-         System.out.println();
-      } );
    }//End Method
 
 }//End Class
