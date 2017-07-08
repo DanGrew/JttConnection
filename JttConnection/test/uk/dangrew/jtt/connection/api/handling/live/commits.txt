@@ -1,0 +1,695 @@
+{
+  "_class" : "org.jenkinsci.plugins.workflow.job.WorkflowRun",
+  "changeSets" : [
+    {
+      "_class" : "hudson.plugins.git.GitChangeSetList",
+      "items" : [
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "cd07928a65a5e5b23b7ad6ad5e97efbab197c990",
+          "timestamp" : 1496348140000,
+          "author" : {
+            "fullName" : "noreply"
+          },
+          "comment" : "1.6.30 RELEASE\n",
+          "msg" : "1.6.30 RELEASE",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "RELEASES"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "0b648e810818f08bfdca94e93f47c8dd4bd802f5",
+          "timestamp" : 1496519900000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "WALL BUILDER AND CONTENT AREA:\nInitial versions with area resizing correctly and wall builder providing \nsplit functionality.\n",
+          "msg" : "WALL BUILDER AND CONTENT AREA:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "delete",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaAsserter.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "30d4e59793de6ad8274467fe2c98e73988cf6a2f",
+          "timestamp" : 1496566387000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA SELECTION:\nAdded selection mechanism for highlighting content areas based on \nclicks.\n",
+          "msg" : "CONTENT AREA SELECTION:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColours.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColoursTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "3f3cd6681588f2c17242a43a508cab2db1045757",
+          "timestamp" : 1496584192000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA INTERSECTIONS:\nAdded mechanism for detecting intersections and adjusting the overlaps \ngiven the type of operation performed.\n",
+          "msg" : "CONTENT AREA INTERSECTIONS:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersectionsTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersections.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "c67fd37e82371e3a2be80137a9db2161c6fd0d43",
+          "timestamp" : 1496605656000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA BOUNDARIES:\nAdded boundary check using width with translation, and for height, to \ncap the change in width and height. Updated WallBuilder to use selection \nfor splitting.\n",
+          "msg" : "CONTENT AREA BOUNDARIES:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "2be35e37ab65467d9df26661ec572a298522c36c",
+          "timestamp" : 1496950758000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT BOUNDARIES:\nImplemented content boundaries to handle the intersections in a \ndifferent way with a different design. Updated WallBuilder to provide \npush and pull.\n",
+          "msg" : "CONTENT BOUNDARIES:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/TestContentArea.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaAsserter.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundaryTest.java"
+            },
+            {
+              "editType" : "delete",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersections.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColoursTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "delete",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersectionsTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/utility/math/NegateTranslation.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/utility/math/IdentityTranslationTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundary.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/utility/math/IdentityTranslation.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/utility/math/NegateTranslationTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "8e8465c8663eecacfa3b1876df49b24e72d7ffb2",
+          "timestamp" : 1497028487000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "BOUNDARY FIXING:\nAdded fixed property to disable position changes when fixed. The wall \nbuilders initial boundaries are then fixed.\n",
+          "msg" : "BOUNDARY FIXING:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "c3f8a62bc606cbe992ba220f9af8aae0a6c7f75e",
+          "timestamp" : 1497783370000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "COLLISIONS:\nImplemented boundary collisions so that they are absorbed by colliding \nContentAreas.\n",
+          "msg" : "COLLISIONS:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaRemoverTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/BoundaryCollisions.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaRemover.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundary.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/BoundaryCollisionsTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "2f8ef060dde343116bdd6be7da197a54e7441808",
+          "timestamp" : 1497783690000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "SELECTION REMOVAL BUG:\nFixed issue where removed item was still selected.\n",
+          "msg" : "SELECTION REMOVAL BUG:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "_class" : "hudson.plugins.git.GitChangeSetList",
+      "items" : [
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "cd07928a65a5e5b23b7ad6ad5e97efbab197c990",
+          "timestamp" : 1496348140000,
+          "author" : {
+            "fullName" : "noreply"
+          },
+          "comment" : "1.6.30 RELEASE\n",
+          "msg" : "1.6.30 RELEASE",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "RELEASES"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "0b648e810818f08bfdca94e93f47c8dd4bd802f5",
+          "timestamp" : 1496519900000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "WALL BUILDER AND CONTENT AREA:\nInitial versions with area resizing correctly and wall builder providing \nsplit functionality.\n",
+          "msg" : "WALL BUILDER AND CONTENT AREA:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaAsserter.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "30d4e59793de6ad8274467fe2c98e73988cf6a2f",
+          "timestamp" : 1496566387000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA SELECTION:\nAdded selection mechanism for highlighting content areas based on \nclicks.\n",
+          "msg" : "CONTENT AREA SELECTION:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColoursTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColours.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "3f3cd6681588f2c17242a43a508cab2db1045757",
+          "timestamp" : 1496584192000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA INTERSECTIONS:\nAdded mechanism for detecting intersections and adjusting the overlaps \ngiven the type of operation performed.\n",
+          "msg" : "CONTENT AREA INTERSECTIONS:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersections.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersectionsTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "c67fd37e82371e3a2be80137a9db2161c6fd0d43",
+          "timestamp" : 1496605656000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT AREA BOUNDARIES:\nAdded boundary check using width with translation, and for height, to \ncap the change in width and height. Updated WallBuilder to use selection \nfor splitting.\n",
+          "msg" : "CONTENT AREA BOUNDARIES:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "2be35e37ab65467d9df26661ec572a298522c36c",
+          "timestamp" : 1496950758000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "CONTENT BOUNDARIES:\nImplemented content boundaries to handle the intersections in a \ndifferent way with a different design. Updated WallBuilder to provide \npush and pull.\n",
+          "msg" : "CONTENT BOUNDARIES:",
+          "paths" : [
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/utility/math/NegateTranslationTest.java"
+            },
+            {
+              "editType" : "delete",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersectionsTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/utility/math/NegateTranslation.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/TestContentArea.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/utility/math/IdentityTranslationTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            },
+            {
+              "editType" : "delete",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaIntersections.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/utility/math/IdentityTranslation.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaColoursTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaAsserter.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "8e8465c8663eecacfa3b1876df49b24e72d7ffb2",
+          "timestamp" : 1497028487000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "BOUNDARY FIXING:\nAdded fixed property to disable position changes when fixed. The wall \nbuilders initial boundaries are then fixed.\n",
+          "msg" : "BOUNDARY FIXING:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "c3f8a62bc606cbe992ba220f9af8aae0a6c7f75e",
+          "timestamp" : 1497783370000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "COLLISIONS:\nImplemented boundary collisions so that they are absorbed by colliding \nContentAreas.\n",
+          "msg" : "COLLISIONS:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/SquareBoundaryTest.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaRemover.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/BoundaryCollisions.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/BoundaryCollisionsTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundaryTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentArea.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/WallBuilder.java"
+            },
+            {
+              "editType" : "add",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaRemoverTest.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentBoundary.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/WallBuilderTest.java"
+            }
+          ]
+        },
+        {
+          "_class" : "hudson.plugins.git.GitChangeSet",
+          "commitId" : "2f8ef060dde343116bdd6be7da197a54e7441808",
+          "timestamp" : 1497783690000,
+          "author" : {
+            "fullName" : "danielanthonygrew"
+          },
+          "comment" : "SELECTION REMOVAL BUG:\nFixed issue where removed item was still selected.\n",
+          "msg" : "SELECTION REMOVAL BUG:",
+          "paths" : [
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/src/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelector.java"
+            },
+            {
+              "editType" : "edit",
+              "file" : "JttDesktop/test/uk/dangrew/jtt/desktop/wallbuilder/ContentAreaSelectorTest.java"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
