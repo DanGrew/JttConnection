@@ -29,7 +29,9 @@ class JenkinsApiRequests {
    static final String CURRENT_JOB_DETAILS       = "/api/json?tree=jobs[name,lastCompletedBuild[result],lastBuild" + BUILD_DETAILS;
    static final String LAST_COMPLETE_JOB_DETAILS = "/api/json?tree=jobs[name,lastCompletedBuild" + BUILD_DETAILS;
    
-   static final String CHANGE_SETS = "/api/json?tree=changeSet[items[commitId,timestamp,author[fullName],msg,comment,paths[editType,file]]]";
+   static final String CHANGE_SET_ITEMS = "[items[commitId,timestamp,author[fullName],msg,comment,paths[editType,file]]]";
+   /** We must check for both 'changeSet' and 'changeSets' since either can be used - the CommitParser doesn't mind.**/
+   static final String CHANGE_SETS = "/api/json?tree=changeSets" + CHANGE_SET_ITEMS +",changeSet" + CHANGE_SET_ITEMS;
    
    static final String TEST_CASES_PROPERTIES = "duration,name,className,failedSince,skipped,status,age";
    static final String TEST_CLASS_PROPERTIES = "duration,name,cases[" + TEST_CASES_PROPERTIES +"]";
