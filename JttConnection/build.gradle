@@ -2,14 +2,15 @@
  * PLGUINS: apply all plugins needed for the build
  */
 plugins {
-    id "com.jfrog.bintray" version "1.6"
+    id "com.jfrog.bintray" version "1.8.1"
+    id 'org.openjfx.javafxplugin' version '0.0.8'
 }
 
-allprojects { 
-	apply plugin: 'java'
-	apply plugin: 'maven'
-	apply plugin: 'maven-publish'
-	apply plugin: 'eclipse'
+allprojects {
+    apply plugin: 'java'
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'eclipse'
 }
 
 /*
@@ -18,15 +19,20 @@ allprojects {
 description = """JenkinsTestTracker-Connection"""
 group = 'jtt'
 
-def buildNumberFromEnvironment = System.getenv()[ 'VERSION_NUMBER' ]
-def buildNumberForThisEnvironment = ( buildNumberFromEnvironment != null ? buildNumberFromEnvironment : 'WORKSPACE' ) 
+def buildNumberFromEnvironment = System.getenv()['VERSION_NUMBER']
+def buildNumberForThisEnvironment = (buildNumberFromEnvironment != null ? buildNumberFromEnvironment : 'WORKSPACE')
 version = buildNumberForThisEnvironment
 
 /*
  * SOURCE: source specific configuration
  */
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
+sourceCompatibility = 11
+targetCompatibility = 11
+
+javafx {
+    version = "11"
+    modules = [ 'javafx.base', 'javafx.controls', 'javafx.media', 'javafx.graphics']
+}
 
 sourceSets {
     main {
@@ -34,7 +40,7 @@ sourceSets {
             srcDir 'src'
         }
         resources {
-			srcDir 'src'
+            srcDir 'src'
         }
     }
     test {
@@ -43,8 +49,8 @@ sourceSets {
         }
         resources {
 //resources are dotted through the folder - arguably against conventions
-			srcDir 'src'
-        	srcDir 'test'
+            srcDir 'src'
+            srcDir 'test'
         }
     }
 }
@@ -53,26 +59,32 @@ sourceSets {
  * DEPENDENCIES: define repos for resolving and dependencies to resolve
  */
 repositories {
-     maven { url  "http://dl.bintray.com/dangrew/SystemDigest" }
-     maven { url  "http://dl.bintray.com/dangrew/JsonUpgradingPersistenceArchitecture" }
-     maven { url  "http://dl.bintray.com/dangrew/JttModel" }
-     maven { url "http://repo.maven.apache.org/maven2" }
+    maven { url "http://dl.bintray.com/dangrew/dag-kode" }
+    maven { url "http://dl.bintray.com/dangrew/SystemDigest" }
+    maven { url "http://dl.bintray.com/dangrew/JsonUpgradingPersistenceArchitecture" }
+    maven { url "http://dl.bintray.com/dangrew/JttModel" }
+    jcenter()
 }
 
 dependencies {
-    compile group: 'org.controlsfx', name: 'controlsfx', version:'8.40.11'
-    compile group: 'dom4j', name: 'dom4j', version:'1.6.1'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version:'4.1.2'
-    compile group: 'org.json', name: 'json', version:'20151123'
-    compile group: 'SystemDigest', name: 'SystemDigest', version: '1.2.53'
-    compile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.1.55'
-    compile group: 'jtt', name: 'jtt-model', version: '1.0.3'
-    testCompile group: 'junit', name: 'junit', version:'4.12'
-    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version:'1.0.5'
-    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version:'1.3'
-    testCompile group: 'org.mockito', name: 'mockito-all', version:'1.9.5'
-    testCompile group: 'SystemDigest', name: 'SystemDigest', version: '1.2.53', classifier: 'tests'
-    testCompile group: 'jtt', name: 'jtt-model', version: '1.0.3', classifier: 'tests'
+    compile group: 'org.controlsfx', name: 'controlsfx', version: '11.0.1'
+    compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.1.2'
+    compile group: 'org.json', name: 'json', version: '20151123'
+
+    compile group: 'uk.dangrew', name: 'dag-kode', version: '1.1.69'
+    compile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.14'
+    compile group: 'jupa', name: 'JsonUpgradingPersistenceArchitecture', version: '1.3.10'
+    compile group: 'jtt', name: 'jtt-model', version: '1.1.7'
+
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'pl.pragmatists', name: 'JUnitParams', version: '1.0.5'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-all', version: '1.3'
+    testCompile group: 'org.mockito', name: 'mockito-all', version: '1.9.5'
+
+    testCompile group: 'uk.dangrew', name: 'dag-kode', version: '1.1.69', classifier: 'tests'
+    testCompile group: 'SystemDigest', name: 'SystemDigest', version: '1.3.14', classifier: 'tests'
+    testCompile group: 'jtt', name: 'jtt-model', version: '1.1.7', classifier: 'tests'
 }
 
 /*
@@ -87,22 +99,22 @@ test {
         events "passed", "skipped", "failed", "standardOut", "standardError"
     }
     reports {
-	    junitXml.enabled = true
-	    html.enabled = false
+        junitXml.enabled = true
+        html.enabled = false
     }
 }
 
 /*
  * INTEGRATION TESTS: configure reports and scope of tests
  */
-task integrationTests( type: Test ) {
-  	filter {
-  		includeTestsMatching "*IT"
-  	}
-  
-	testLogging.events = test.testLogging.events
-	reports.junitXml.enabled = test.reports.junitXml.enabled
-	reports.html.enabled = test.reports.html.enabled
+task integrationTests(type: Test) {
+    filter {
+        includeTestsMatching "*IT"
+    }
+
+    testLogging.events = test.testLogging.events
+    reports.junitXml.enabled = test.reports.junitXml.enabled
+    reports.html.enabled = test.reports.html.enabled
 }
 check.dependsOn integrationTests
 
@@ -110,8 +122,8 @@ check.dependsOn integrationTests
  * TEST PACKAGING: packaging tests
  */
 task packageTests(type: Jar) {
-  from sourceSets.test.output
-  classifier = 'tests'
+    from sourceSets.test.output
+    classifier = 'tests'
 }
 artifacts.archives packageTests
 
@@ -123,16 +135,16 @@ bintray {
     key = bintrayKey
     configurations = ['archives']
     publications = ['core', 'runnable']
-    
+
     publish = true //auto publish everything
-    
+
     pkg {
         repo = 'JttConnection'
         name = 'JttConnection'
         userOrg = bintrayUser
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/DanGrew/JttConnection.git'
-        
+
         version {
             name = buildNumberForThisEnvironment
             desc = 'Continuous Delivery rolling version'
@@ -143,12 +155,12 @@ bintray {
 
 publishing {
     publications {
-    	//publish standard core components - jar + tests
+        //publish standard core components - jar + tests
         core(MavenPublication) {
-        	//publish all items
+            //publish all items
             from components.java
-            
-        	//configure description
+
+            //configure description
             groupId group
             artifactId 'jtt-connection'
             version version

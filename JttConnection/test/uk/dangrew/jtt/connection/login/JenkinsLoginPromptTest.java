@@ -30,7 +30,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import uk.dangrew.jtt.connection.javafx.dialog.DialogConfiguration;
-import uk.dangrew.sd.graphics.launch.TestApplication;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
 
 public class JenkinsLoginPromptTest {

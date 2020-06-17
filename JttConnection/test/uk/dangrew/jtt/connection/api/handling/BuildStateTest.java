@@ -11,7 +11,7 @@ package uk.dangrew.jtt.connection.api.handling;
 import org.junit.Test;
 
 import uk.dangrew.jtt.model.jobs.BuildState;
-import uk.dangrew.jtt.model.utility.TestCommon;
+import uk.dangrew.kode.TestCommon;
 
 /**
  * {@link BuildState} test.

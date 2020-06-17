@@ -19,12 +19,13 @@ import uk.dangrew.jtt.model.commit.Commit;
 import uk.dangrew.jtt.model.commit.EditType;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
-import uk.dangrew.jtt.model.utility.TestCommon;
+import uk.dangrew.kode.TestCommon;
+import uk.dangrew.kode.utility.io.IoCommon;
 
 public class CommitsParserTest {
 
    @Test public void shouldReadFileWithCommits(){
-      String parsed = TestCommon.readFileIntoString( getClass(), "commits.txt" );
+      String parsed = new IoCommon().readFileIntoString( getClass(), "commits.txt" );
       JSONObject object = new JSONObject( parsed );
       
       JenkinsJob job = new JenkinsJobImpl( "anything" );

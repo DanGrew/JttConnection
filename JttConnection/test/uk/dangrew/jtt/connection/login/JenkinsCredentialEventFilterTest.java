@@ -25,7 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
 import uk.dangrew.jtt.connection.api.connections.ConnectionManager;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
-import uk.dangrew.sd.graphics.launch.TestApplication;
+import uk.dangrew.kode.launch.TestApplication;
 
 public class JenkinsCredentialEventFilterTest {
    

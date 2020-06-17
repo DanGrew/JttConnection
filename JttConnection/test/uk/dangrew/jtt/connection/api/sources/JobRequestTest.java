@@ -10,7 +10,7 @@ package uk.dangrew.jtt.connection.api.sources;
 
 import org.junit.Test;
 
-import uk.dangrew.jtt.model.utility.TestCommon;
+import uk.dangrew.kode.TestCommon;
 
 public class JobRequestTest {
 

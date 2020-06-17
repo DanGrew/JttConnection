@@ -22,12 +22,13 @@ import uk.dangrew.jtt.model.jobs.BuildState;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.storage.database.JenkinsDatabase;
 import uk.dangrew.jtt.model.storage.database.SystemWideJenkinsDatabaseImpl;
-import uk.dangrew.jtt.model.utility.TestCommon;
+import uk.dangrew.kode.TestCommon;
+import uk.dangrew.kode.utility.io.IoCommon;
 
 public class JobDetailsParserTest {
 
    @Test public void shouldParseSampleDataIntoDatabase() {
-      String parsed = TestCommon.readFileIntoString( getClass(), "job-details-sample.txt" );
+      String parsed = new IoCommon().readFileIntoString( getClass(), "job-details-sample.txt" );
       JSONObject object = new JSONObject( parsed );
       
       JenkinsDatabase database = new SystemWideJenkinsDatabaseImpl().get();

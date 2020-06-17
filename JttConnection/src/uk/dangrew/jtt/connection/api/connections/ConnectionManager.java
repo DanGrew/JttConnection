@@ -8,14 +8,14 @@
  */
 package uk.dangrew.jtt.connection.api.connections;
 
+import javafx.util.Pair;
+import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
+import uk.dangrew.kode.event.structure.Event;
+
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
-
-import javafx.util.Pair;
-import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
-import uk.dangrew.jtt.model.event.structure.Event;
 
 /**
  * The {@link ConnectionManager} is responsible for managing the {@link JenkinsConnection}s in the system

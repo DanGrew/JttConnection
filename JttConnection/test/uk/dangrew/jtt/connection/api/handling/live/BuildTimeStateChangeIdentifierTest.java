@@ -8,32 +8,29 @@
  */
 package uk.dangrew.jtt.connection.api.handling.live;
 
-import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyZeroInteractions;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import uk.dangrew.jtt.model.event.structure.Event;
-import uk.dangrew.jtt.model.event.structure.EventSubscription;
 import uk.dangrew.jtt.model.jobs.BuildResultStatus;
 import uk.dangrew.jtt.model.jobs.BuildState;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
+import uk.dangrew.kode.event.structure.Event;
+import uk.dangrew.kode.event.structure.EventSubscription;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class BuildTimeStateChangeIdentifierTest {
 
    private JenkinsJob job;
    @Mock private EventSubscription< JobBuiltResult > subscription;
    
-   @Captor private ArgumentCaptor< Event< JobBuiltResult > > eventCaptor;
+   @Captor private ArgumentCaptor<Event< JobBuiltResult >> eventCaptor;
    private StateChangeIdentifier systemUnderTest;
 
    @Before public void initialiseSystemUnderTest() {

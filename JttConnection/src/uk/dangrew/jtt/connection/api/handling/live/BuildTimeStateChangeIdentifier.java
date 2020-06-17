@@ -8,12 +8,12 @@
  */
 package uk.dangrew.jtt.connection.api.handling.live;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import uk.dangrew.jtt.model.event.structure.Event;
 import uk.dangrew.jtt.model.jobs.BuildResultStatus;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
+import uk.dangrew.kode.event.structure.Event;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The {@link BuildTimeStateChangeIdentifier} is responsible for assessing the state changes made

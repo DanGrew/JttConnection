@@ -15,7 +15,7 @@ import static org.junit.Assert.assertThat;
 import org.junit.Before;
 import org.junit.Test;
 
-import uk.dangrew.sd.graphics.launch.TestApplication;
+import uk.dangrew.kode.launch.TestApplication;
 
 public class JenkinsLoginDetailsTest {
 

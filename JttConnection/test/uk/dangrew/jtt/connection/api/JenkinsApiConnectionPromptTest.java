@@ -8,22 +8,20 @@
  */
 package uk.dangrew.jtt.connection.api;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.when;
-
-import java.util.Optional;
-import java.util.function.Function;
-
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
 import uk.dangrew.jtt.connection.login.JenkinsLoginPrompt;
-import uk.dangrew.sd.graphics.launch.TestApplication;
+import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
+
+import java.util.Optional;
+import java.util.function.Function;
+
+import static org.hamcrest.Matchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.when;
 
 public class JenkinsApiConnectionPromptTest {
 

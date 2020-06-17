@@ -8,8 +8,8 @@
  */
 package uk.dangrew.jtt.connection.synchronisation.time;
 
-import java.time.Clock;
-
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,16 +17,14 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
-import uk.dangrew.jtt.connection.synchronisation.time.BuildProgressCalculator;
 import uk.dangrew.jtt.model.jobs.BuildState;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
 import uk.dangrew.jtt.model.storage.database.JenkinsDatabase;
 import uk.dangrew.jtt.model.storage.database.TestJenkinsDatabaseImpl;
-import uk.dangrew.jtt.model.utility.TestCommon;
+import uk.dangrew.kode.TestCommon;
+
+import java.time.Clock;
 
 /**
  * {@link BuildProgressCalculator} test.

@@ -8,26 +8,23 @@
  */
 package uk.dangrew.jtt.connection.api.connections;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.nullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
+import javafx.util.Pair;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-
-import javafx.util.Pair;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
-import uk.dangrew.jtt.model.event.structure.Event;
+import uk.dangrew.kode.event.structure.Event;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.nullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.*;
 
 public class ConnectionManagerTest {
 
@@ -36,7 +33,7 @@ public class ConnectionManagerTest {
    private static final String PASSWORD = "something secret";
    
    @Mock private ConnectionEvent events;
-   @Captor private ArgumentCaptor< Event< Pair< JenkinsConnection, ConnectionState > > > captor;
+   @Captor private ArgumentCaptor<Event< Pair< JenkinsConnection, ConnectionState > >> captor;
    
    @Mock private JenkinsConnection connection;
    @Mock private ConnectionActivator activator;

@@ -19,7 +19,7 @@ import org.mockito.MockitoAnnotations;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.TextField;
-import uk.dangrew.sd.graphics.launch.TestApplication;
+import uk.dangrew.kode.launch.TestApplication;
 
 public class TextFieldEventFilterTest {
 

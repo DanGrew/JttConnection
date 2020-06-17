@@ -8,15 +8,15 @@
  */
 package uk.dangrew.jtt.connection.api.handling.live;
 
+import uk.dangrew.jtt.model.jobs.BuildResultStatus;
+import uk.dangrew.jtt.model.jobs.BuildState;
+import uk.dangrew.jtt.model.jobs.JenkinsJob;
+import uk.dangrew.kode.event.structure.Event;
+
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.Entry;
-
-import uk.dangrew.jtt.model.event.structure.Event;
-import uk.dangrew.jtt.model.jobs.BuildResultStatus;
-import uk.dangrew.jtt.model.jobs.BuildState;
-import uk.dangrew.jtt.model.jobs.JenkinsJob;
 
 /**
  * The {@link JobBuiltIdentifier} is a {@link StateChangeIdentifier} that is responsible
@@ -89,7 +89,7 @@ public class JobBuiltIdentifier implements StateChangeIdentifier {
     * @param job the {@link JenkinsJob} to notify for.
     */
    private void notifyJobBuilt( JenkinsJob job ){
-      builtEvents.notify( new Event< JobBuiltResult >( new JobBuiltResult( 
+      builtEvents.notify( new Event< JobBuiltResult >( new JobBuiltResult(
                job, 
                buildResultStatusMap.get( job ), 
                job.getBuildStatus() ) 
