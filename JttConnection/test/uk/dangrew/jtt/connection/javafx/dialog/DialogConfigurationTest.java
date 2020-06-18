@@ -17,7 +17,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
 
-import com.sun.javafx.application.PlatformImpl;
+
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -25,6 +25,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.DialogPane;
+import uk.dangrew.kode.javafx.platform.JavaFxThreading;
 import uk.dangrew.kode.launch.TestApplication;
 
 public class DialogConfigurationTest {
@@ -41,7 +42,7 @@ public class DialogConfigurationTest {
       TestApplication.startPlatform();
       MockitoAnnotations.initMocks( this );
       
-      PlatformImpl.runAndWait( () -> dialog = new Dialog<>() );
+       JavaFxThreading.runAndWait( () -> dialog = new Dialog<>() );
       buttonType = ButtonType.APPLY;
       pane = dialog.getDialogPane();
       pane.getButtonTypes().add( buttonType );

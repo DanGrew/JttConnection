@@ -22,7 +22,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 
-import com.sun.javafx.application.PlatformImpl;
+
 
 import javafx.event.ActionEvent;
 import javafx.geometry.Pos;
@@ -30,6 +30,7 @@ import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.control.ButtonType;
 import javafx.scene.layout.BorderPane;
 import uk.dangrew.jtt.connection.javafx.dialog.DialogConfiguration;
+import uk.dangrew.kode.javafx.platform.JavaFxThreading;
 import uk.dangrew.kode.launch.TestApplication;
 import uk.dangrew.sd.viewer.basic.DigestViewer;
 
@@ -44,7 +45,7 @@ public class JenkinsLoginPromptTest {
       MockitoAnnotations.initMocks( this );
       TestApplication.startPlatform();
       digestViewer = new DigestViewer();
-      PlatformImpl.runAndWait( () -> systemUnderTest = new JenkinsLoginPrompt(
+       JavaFxThreading.runAndWait( () -> systemUnderTest = new JenkinsLoginPrompt(
                configuration, digest, digestViewer
       ) );
    }//End Method
@@ -53,7 +54,7 @@ public class JenkinsLoginPromptTest {
    @Test public void manual() {
       TestApplication.startPlatform();
       
-      PlatformImpl.runAndWait( () -> {
+       JavaFxThreading.runAndWait( () -> {
          new JenkinsLoginPrompt( digestViewer ).showAndWait();
       } );
    }//End Method
