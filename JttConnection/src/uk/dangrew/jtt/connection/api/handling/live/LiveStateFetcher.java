@@ -8,23 +8,22 @@
  */
 package uk.dangrew.jtt.connection.api.handling.live;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.json.JSONObject;
-
 import uk.dangrew.jtt.connection.api.handling.JenkinsFetcher;
 import uk.dangrew.jtt.connection.api.handling.JenkinsFetcherImpl;
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
 import uk.dangrew.jtt.connection.api.sources.JenkinsBaseRequest;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
-import uk.dangrew.jtt.connection.data.json.conversion.ApiResponseToJsonConverter;
 import uk.dangrew.jtt.model.jobs.BuildResultStatus;
 import uk.dangrew.jtt.model.jobs.BuildState;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.storage.database.JenkinsDatabase;
 import uk.dangrew.jtt.model.storage.database.SystemWideJenkinsDatabaseImpl;
+import uk.dangrew.jupa.json.io.ApiResponseToJsonConverter;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * {@link LiveStateFetcher} provides a method of updating the live information of {@link JenkinsJob}s. */

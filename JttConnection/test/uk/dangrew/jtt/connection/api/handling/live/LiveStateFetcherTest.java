@@ -8,12 +8,8 @@
  */
 package uk.dangrew.jtt.connection.api.handling.live;
 
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-import static org.mockito.Mockito.verifyZeroInteractions;
-import static org.mockito.Mockito.when;
-
+import junitparams.JUnitParamsRunner;
+import junitparams.Parameters;
 import org.json.JSONObject;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,20 +17,19 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-
-import junitparams.JUnitParamsRunner;
-import junitparams.Parameters;
 import uk.dangrew.jtt.connection.api.handling.JenkinsFetcher;
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.api.sources.JenkinsBaseRequest;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
-import uk.dangrew.jtt.connection.data.json.conversion.ApiResponseToJsonConverter;
 import uk.dangrew.jtt.model.jobs.BuildResultStatus;
 import uk.dangrew.jtt.model.jobs.BuildState;
 import uk.dangrew.jtt.model.jobs.JenkinsJob;
 import uk.dangrew.jtt.model.jobs.JenkinsJobImpl;
 import uk.dangrew.jtt.model.storage.database.JenkinsDatabase;
 import uk.dangrew.jtt.model.storage.database.TestJenkinsDatabaseImpl;
+import uk.dangrew.jupa.json.io.ApiResponseToJsonConverter;
+
+import static org.mockito.Mockito.*;
 
 @RunWith( JUnitParamsRunner.class )
 public class LiveStateFetcherTest {

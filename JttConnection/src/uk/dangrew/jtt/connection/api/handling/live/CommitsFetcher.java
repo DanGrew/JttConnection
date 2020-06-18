@@ -9,12 +9,11 @@
 package uk.dangrew.jtt.connection.api.handling.live;
 
 import org.json.JSONObject;
-
 import uk.dangrew.jtt.connection.api.sources.ExternalApi;
 import uk.dangrew.jtt.connection.api.sources.JenkinsApiImpl;
 import uk.dangrew.jtt.connection.api.sources.JenkinsConnection;
 import uk.dangrew.jtt.connection.api.sources.JobRequest;
-import uk.dangrew.jtt.connection.data.json.conversion.ApiResponseToJsonConverter;
+import uk.dangrew.jupa.json.io.ApiResponseToJsonConverter;
 
 /**
  * The {@link CommitsFetcher} is responsible for requesting the change sets for the new builds
